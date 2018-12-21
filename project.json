@@ -1,0 +1,16 @@
+{
+    "id":"reflecs.systems.sdl2",
+    "type":"package",
+    "value": {
+        "use": [
+            "reflecs",
+            "reflecs.components.graphics"
+        ]
+    },
+    "lang.c": {
+        "lib": ["SDL2"],
+        "${os darwin}": {
+            "ldflags": ["-framework OpenGL"]
+        }
+    }
+}
