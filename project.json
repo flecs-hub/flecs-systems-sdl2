@@ -4,13 +4,8 @@
     "value": {
         "use": [
             "reflecs",
-            "reflecs.components.graphics"
+            "reflecs.components.graphics",
+            "sdl2"
         ]
-    },
-    "lang.c": {
-        "lib": ["SDL2"],
-        "${os darwin}": {
-            "ldflags": ["-framework OpenGL"]
-        }
     }
 }

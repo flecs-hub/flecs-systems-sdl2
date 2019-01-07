@@ -1,7 +1,7 @@
 #ifndef REFLECS_SYSTEMS_SDL2_H
 #define REFLECS_SYSTEMS_SDL2_H
 
-#include "prebaked.h"
+#include "bake_config.h"
 
 #ifdef __cplusplus
 extern "C" {

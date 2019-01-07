@@ -6,10 +6,34 @@ typedef struct Sdl2Window {
     SDL_Renderer *display;
 } Sdl2Window;
 
+static
+void PollWindow(
+    EcsWorld *world,
+    Sdl2Window *wnd)
+{
+    SDL_Event e;
+    SDL_SetRenderDrawColor(wnd->display, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderClear(wnd->display);
+    SDL_RenderPresent(wnd->display);
+    SDL_PollEvent(&e);
+
+    if (e.type == SDL_QUIT) {
+        ecs_quit(world);
+    }
+}
+
+static
+void SdlPoll(EcsRows *rows) {
+    void *row;
+    for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
+        Sdl2Window *wnd = ecs_column(rows, row, 0);
+        PollWindow(rows->world, wnd);
+    }
+}
+
+static
 void SdlInitWindow(EcsRows *rows) {
     EcsWorld *world = rows->world;
-
-    printf("InitWindow\n");
 
     void *row;
     for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
@@ -18,7 +42,7 @@ void SdlInitWindow(EcsRows *rows) {
         EcsHandle entity = ecs_entity(row);
 
         SDL_Window *window = SDL_CreateWindow(
-            canvas->title,
+            "SDL2 Window",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             canvas->window.width,
@@ -27,7 +51,8 @@ void SdlInitWindow(EcsRows *rows) {
         );
 
         if (!window) {
-            printf("SDL2 window creation failed for canvas\n");
+            fprintf(stderr, "SDL2 window creation failed for canvas: %s\n",
+                SDL_GetError());
             continue;
         }
 
@@ -38,7 +63,7 @@ void SdlInitWindow(EcsRows *rows) {
         );
 
         if (!display) {
-            printf("SDL2 renderer creation failed for canvas: %s\n",
+            fprintf(stderr, "SDL2 renderer creation failed for canvas: %s\n",
               SDL_GetError());
             continue;
         }
@@ -50,6 +75,7 @@ void SdlInitWindow(EcsRows *rows) {
     }
 }
 
+static
 void SdlDeinitWindow(EcsRows *rows) {
     void *row;
     for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
@@ -58,6 +84,7 @@ void SdlDeinitWindow(EcsRows *rows) {
     }
 }
 
+static
 void SdlDeinit(EcsRows *rows) {
     SDL_Quit();
 }
@@ -67,83 +94,29 @@ void EcsSystemsSdl2(
     int flags,
     void *handles_out)
 {
-    bool do_2d = !flags || flags & ECS_2D;
-    bool do_3d = !flags || flags & ECS_3D;
+    /*bool do_2d = !flags || flags & ECS_2D;
+    bool do_3d = !flags || flags & ECS_3D;*/
     EcsSystemsSdl2Handles *handles = handles_out;
 
     ECS_IMPORT(world, EcsComponentsGraphics, flags);
 
     ECS_COMPONENT(world, Sdl2Window);
 
-    ECS_SYSTEM(world, SdlInitWindow, EcsOnAdd, EcsCanvas2D, HANDLE.Sdl2Window);
+    ECS_SYSTEM(world, SdlInitWindow, EcsOnSet, EcsCanvas2D, HANDLE.Sdl2Window);
     ECS_SYSTEM(world, SdlDeinitWindow, EcsOnRemove, Sdl2Window);
     ECS_SYSTEM(world, SdlDeinit, EcsOnRemove, 0);
+    ECS_SYSTEM(world, SdlPoll, EcsOnFrame, Sdl2Window);
 
-    ECS_FAMILY(world, Sdl2, SdlInitWindow, SdlDeinitWindow);
+    ECS_FAMILY(world, Sdl2, SdlInitWindow, SdlDeinitWindow, SdlPoll);
 
     ecs_add(world, SdlInitWindow_h, EcsHidden_h);
     ecs_add(world, SdlDeinitWindow_h, EcsHidden_h);
+    ecs_add(world, SdlPoll_h, EcsHidden_h);
     ecs_commit(world, SdlInitWindow_h);
     ecs_commit(world, SdlDeinitWindow_h);
+    ecs_commit(world, SdlPoll_h);
 
-    //SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_WINDOW_OPENGL);
 
     handles->Sdl2 = Sdl2_h;
-
-/*
-
-    int active = 0;
-    EcsVector2D position = {0,0};
-    SDL_Event e;
-    do {
-        SDL_SetRenderDrawColor(display, 0, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(display);
-        EcsCollisionInfo *end = collisions;
-        EcsColliderData **iter = colliders;
-        while(*iter != NULL) {
-            Color *color = &cWhite;
-            if (*iter == colliders[active]) {
-                color = &cGreen;
-            } else {
-                if (EcsPhysis2dCollisionCheck(*iter, colliders[active], end)) {
-                    position[0] = end->direction[0];
-                    position[1] = end->direction[1];
-                    EcsVector2D_scale(&position, end->distance, &position);
-                    MoveCollider(*iter, &position);
-                    end++;
-                }
-            }
-            DrawCollider(display, *iter, color);
-            iter++;
-        }
-        EcsCollisionInfo *infoIter = collisions;
-        while (infoIter < end) {
-            DrawCollisionInfo(display, EcsColliderData_Vector2(colliders[active]), infoIter, &cRed);
-            infoIter++;
-        }
-        SDL_RenderPresent(display);
-
-        SDL_PollEvent(&e);
-        if (e.type == SDL_KEYDOWN) {
-            position[0] = 0;
-            position[1] = 0;
-
-            if (e.key.keysym.scancode == SDL_SCANCODE_UP) {
-                position[1] -= .1;
-            }
-            if (e.key.keysym.scancode == SDL_SCANCODE_DOWN) {
-                position[1] += .1;
-            }
-            if (e.key.keysym.scancode == SDL_SCANCODE_LEFT) {
-                position[0] -= .1;
-            }
-            if (e.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
-                position[0] += .1;
-            }
-            if (e.key.keysym.scancode == SDL_SCANCODE_N) {
-                active = (active+1)%COLLIDERS_COUNT;
-            }
-        }
-    } while(e.type != SDL_QUIT);
-*/
 }
