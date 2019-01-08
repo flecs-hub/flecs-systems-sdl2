@@ -95,7 +95,7 @@ void DrawCircle(
     EcsCircle *circle)
 {
     float radius = circle->radius;
-    int C = radius;
+    int C = radius * 2.0 * M_PI;
     float step = (2.0 * M_PI) / C;
     EcsVec2Int points[C + 1];
 
