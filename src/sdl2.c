@@ -27,6 +27,7 @@ void DrawRectangle(
     EcsPosition2D *p,
     EcsRotation2D*r,
     EcsScale2D *s,
+    EcsColor *c,
     EcsRectangle *rectangle)
 {
     int w = rectangle->width / 2.0;
@@ -64,7 +65,7 @@ void DrawRectangle(
         Sint16 gfx_y[5];
         Vec2IntToGfx(points, gfx_x, gfx_y, 5);
 
-        filledPolygonRGBA(wnd->display, gfx_x, gfx_y, 5, 255, 255, 255, 255);
+        filledPolygonRGBA(wnd->display, gfx_x, gfx_y, 5, c->r, c->g, c->b, c->a);
     }
 }
 
@@ -74,6 +75,7 @@ void DrawSquare(
     EcsPosition2D *p,
     EcsRotation2D*r,
     EcsScale2D *s,
+    EcsColor *c,
     EcsSquare *square)
 {
     EcsRectangle rect = {
@@ -81,7 +83,7 @@ void DrawSquare(
         .height = square->size
     };
 
-    DrawRectangle(wnd, p, r, s, &rect);
+    DrawRectangle(wnd, p, r, s, c, &rect);
 }
 
 static
@@ -89,23 +91,35 @@ void DrawCircle(
     Sdl2Window *wnd,
     EcsPosition2D *p,
     EcsScale2D *s,
+    EcsColor *c,
     EcsCircle *circle)
 {
-    float x = p->x;
-    float y = p->y;
     float radius = circle->radius;
+    int C = radius;
+    float step = (2.0 * M_PI) / C;
+    EcsVec2Int points[C + 1];
 
-    float dy;
-    for (dy = 1.0; dy <= radius; dy += 1.0)
+    int i;
+    for (i = 0; i < C; i ++)
     {
-        double dx = floor(sqrt((2.0 * radius * dy) - (dy * dy)));
-
-        SDL_RenderDrawLine(wnd->display,
-            x - dx, y + dy - radius, x + dx, y + dy - radius);
-
-        SDL_RenderDrawLine(wnd->display,
-            x - dx, y - dy + radius, x + dx, y - dy + radius);
+        points[i].x = cos((float)i * step) * radius;
+        points[i].y = sin((float)i * step) * radius;
     }
+
+    points[i].x = radius;
+    points[i].y = 0.0;
+
+    C ++;
+
+    EcsMat3x3 transform = ECS_MAT3X3_IDENTITY;
+    if (p) ecs_mat3x3_add_translation(&transform, p);
+    ecs_mat3x3_transform_int(&transform, points, points, C);
+
+    Sint16 gfx_x[C];
+    Sint16 gfx_y[C];
+    Vec2IntToGfx(points, gfx_x, gfx_y, C);
+
+    filledPolygonRGBA(wnd->display, gfx_x, gfx_y, C, c->r, c->g, c->b, c->a);
 }
 
 static
@@ -113,6 +127,7 @@ void SdlDraw2DShapes(
     EcsRows *rows)
 {
     void *row;
+    EcsColor white = {.r = 255, .g = 255, .b = 255, .a = 255};
 
     EcsHandle shape_h = ecs_handle(rows, 5);
     EcsHandle EcsSquare_h = ecs_handle(rows, 6);
@@ -128,18 +143,16 @@ void SdlDraw2DShapes(
         EcsColor *c = ecs_column(rows, row, 4);
         void *shape = ecs_column(rows, row, 5);
 
-        if (c) {
-            SDL_SetRenderDrawColor(wnd->display, c->r, c->g, c->b, c->a);
-        } else {
-            SDL_SetRenderDrawColor(wnd->display, 255, 255, 255, 255);
+        if (!c) {
+            c = &white;
         }
 
         if (shape_h == EcsSquare_h) {
-            DrawSquare(wnd, p, r, s, shape);
+            DrawSquare(wnd, p, r, s, c, shape);
         } else if (shape_h == EcsRectangle_h) {
-            DrawRectangle(wnd, p, r, s, shape);
+            DrawRectangle(wnd, p, r, s, c, shape);
         } else if (shape_h == EcsCircle_h) {
-            DrawCircle(wnd, p, s, shape);
+            DrawCircle(wnd, p, s, c, shape);
         }
     }
 }
