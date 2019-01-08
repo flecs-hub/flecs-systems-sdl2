@@ -5,7 +5,12 @@
         "use": [
             "reflecs",
             "reflecs.components.graphics",
+            "reflecs.components.geometry",
+            "reflecs.components.transform",
             "sdl2"
         ]
+    },
+    "lang.c": {
+        "lib": ["m"]
     }
 }

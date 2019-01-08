@@ -20,6 +20,9 @@
 /* Headers of public dependencies */
 #include <reflecs>
 #include <reflecs.components.graphics>
+#include <reflecs.components.geometry>
+#include <reflecs.components.transform>
+#include <sdl2>
 
 /* Headers of private dependencies */
 #ifdef REFLECS_SYSTEMS_SDL2_IMPL
