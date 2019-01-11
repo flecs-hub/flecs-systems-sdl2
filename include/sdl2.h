@@ -9,7 +9,8 @@ extern "C" {
 
 typedef struct EcsSystemsSdl2Handles {
    EcsHandle Sdl2;
-   EcsHandle Sdl2Poll;
+   EcsHandle Sdl2Input;
+   EcsHandle Sdl2Render;
 } EcsSystemsSdl2Handles;
 
 void EcsSystemsSdl2(
@@ -19,7 +20,8 @@ void EcsSystemsSdl2(
 
 #define EcsSystemsSdl2_DeclareHandles(handles)\
     EcsDeclareHandle(handles, Sdl2);\
-    EcsDeclareHandle(handles, Sdl2Poll);
+    EcsDeclareHandle(handles, Sdl2Input);\
+    EcsDeclareHandle(handles, Sdl2Render);
 
 #ifdef __cplusplus
 }

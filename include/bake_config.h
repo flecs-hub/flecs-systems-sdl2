@@ -22,6 +22,7 @@
 #include <reflecs.components.graphics>
 #include <reflecs.components.geometry>
 #include <reflecs.components.transform>
+#include <reflecs.components.input>
 #include <sdl2>
 
 /* Headers of private dependencies */
