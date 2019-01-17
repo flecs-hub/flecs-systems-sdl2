@@ -2,8 +2,11 @@
     "id":"reflecs.systems.sdl2",
     "type":"package",
     "value": {
+        "author": "Sander Mertens",
+        "description": "SDL2 based renderer for reflecs",
         "use": [
             "reflecs",
+            "reflecs.math",
             "reflecs.components.graphics",
             "reflecs.components.geometry",
             "reflecs.components.transform",
