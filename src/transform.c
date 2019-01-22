@@ -60,11 +60,11 @@ void SdlTransformChildren2D(EcsRows *rows) {
     void *row;
     for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
         EcsEntity entity = ecs_entity(rows, row, ECS_ROW_ENTITY);
-        ecs_run(world, SdlInitTransformChildren2D_h, dt, entity, NULL);
-        ecs_run(world, SdlApplyTranslation2D_h, dt, entity, NULL);
-        ecs_run(world, SdlApplyRotation2D_h, dt, entity, NULL);
-        ecs_run(world, SdlApplyScaling2D_h, dt, entity, NULL);
-        ecs_run(world, SdlTransformChildren2D_h, dt, entity, NULL);
+        ecs_run_w_filter(world, SdlInitTransformChildren2D_h, dt, 0, 0, entity, NULL);
+        ecs_run_w_filter(world, SdlApplyTranslation2D_h, dt, 0, 0, entity, NULL);
+        ecs_run_w_filter(world, SdlApplyRotation2D_h, dt, 0, 0, entity, NULL);
+        ecs_run_w_filter(world, SdlApplyScaling2D_h, dt, 0, 0, entity, NULL);
+        ecs_run_w_filter(world, SdlTransformChildren2D_h, dt, 0, 0, entity, NULL);
     }
 }
 
@@ -78,9 +78,9 @@ void SdlTransform2D(EcsRows *rows) {
     EcsEntity SdlApplyScaling2D_h = ecs_component(rows, 4);
     EcsEntity SdlTransformChildren2D_h = ecs_component(rows, 5);
 
-    ecs_run(world, SdlInitTransformChildren2D_h, dt, root, NULL);
-    ecs_run(world, SdlApplyTranslation2D_h, dt, root, NULL);
-    ecs_run(world, SdlApplyRotation2D_h, dt, root, NULL);
-    ecs_run(world, SdlApplyScaling2D_h, dt, root, NULL);
-    ecs_run(world, SdlTransformChildren2D_h, dt, root, NULL);
+    ecs_run_w_filter(world, SdlInitTransformChildren2D_h, dt, 0, 0, root, NULL);
+    ecs_run_w_filter(world, SdlApplyTranslation2D_h, dt, 0, 0, root, NULL);
+    ecs_run_w_filter(world, SdlApplyRotation2D_h, dt, 0, 0, root, NULL);
+    ecs_run_w_filter(world, SdlApplyScaling2D_h, dt, 0, 0, root, NULL);
+    ecs_run_w_filter(world, SdlTransformChildren2D_h, dt, 0, 0, root, NULL);
 }

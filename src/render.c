@@ -126,9 +126,9 @@ void SdlRender2D(EcsRows *rows) {
         SDL_SetRenderDrawColor(wnd->display, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(wnd->display);
 
-        ecs_run(world, SdlRenderSquare_h, 0, root, NULL);
-        ecs_run(world, SdlRenderRectangle_h, 0, root, NULL);
-        ecs_run(world, SdlRenderCircle_h, 0, root, NULL);
+        ecs_run_w_filter(world, SdlRenderSquare_h, 0, 0, 0, root, NULL);
+        ecs_run_w_filter(world, SdlRenderRectangle_h, 0, 0, 0, root, NULL);
+        ecs_run_w_filter(world, SdlRenderCircle_h, 0, 0, 0, root, NULL);
 
         SDL_RenderPresent(wnd->display);
     }
