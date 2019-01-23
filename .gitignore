@@ -2,3 +2,4 @@
 *.o
 *.dylib
 .DS_Store
+*.so

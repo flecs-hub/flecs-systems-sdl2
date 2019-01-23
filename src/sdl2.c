@@ -17,8 +17,13 @@ void EcsSystemsSdl2(
     ECS_IMPORT(world, EcsComponentsGeometry, flags);
     ECS_IMPORT(world, EcsComponentsTransform, flags);
     ECS_IMPORT(world, EcsComponentsInput, flags);
+    ECS_IMPORT(world, EcsSystemsTransform, flags);
 
     ECS_COMPONENT(world, SdlWindow);
+
+    /* Camera transformation */
+    ECS_SYSTEM(world, SdlCameraTransform2D, EcsOnFrame, EcsCamera2D, CONTAINER.EcsRoot);
+    ecs_add(world, SdlCameraTransform2D_h, EcsHidden_h);
 
 
     /* -- SDL / Window initialization -- */
@@ -36,52 +41,6 @@ void EcsSystemsSdl2(
 
     ECS_SYSTEM(world, SdlInput, EcsOnLoad, EcsInput);
     ecs_add(world, SdlInput_h, EcsHidden_h);
-
-
-    /* -- Transformations -- */
-
-    /* Apply camera transformation */
-    ECS_SYSTEM(world, SdlCameraTransform2D, EcsOnFrame, EcsCamera2D, CONTAINER.EcsRoot);
-    ecs_add(world, SdlCameraTransform2D_h, EcsHidden_h);
-
-    /* System that adds transform matrix to every entity with transformations */
-    ECS_SYSTEM(world, SdlAddMatTransform2D, EcsOnLoad, EcsPosition2D | EcsRotation2D | EcsScale2D, !EcsMatTransform2D);
-    ecs_add(world, SdlAddMatTransform2D_h, EcsHidden_h);
-
-    /* Systems that add transformations to transform matrix */
-    ECS_SYSTEM(world, SdlApplyTranslation2D, EcsOnDemand, EcsMatTransform2D, EcsPosition2D);
-    ECS_SYSTEM(world, SdlApplyRotation2D, EcsOnDemand, EcsMatTransform2D, EcsRotation2D);
-    ECS_SYSTEM(world, SdlApplyScaling2D, EcsOnDemand, EcsMatTransform2D, EcsScale2D);
-    ecs_add(world, SdlApplyTranslation2D_h, EcsHidden_h);
-    ecs_add(world, SdlApplyRotation2D_h, EcsHidden_h);
-    ecs_add(world, SdlApplyScaling2D_h, EcsHidden_h);
-
-    /* Copy transformation from parent to child entities */
-    ECS_SYSTEM(world, SdlInitTransformChildren2D, EcsOnDemand, EcsMatTransform2D, CONTAINER.EcsMatTransform2D);
-    ecs_add(world, SdlInitTransformChildren2D_h, EcsHidden_h);
-
-    /* System that applies transforms on child entities (invoked recursively) */
-    ECS_SYSTEM(world, SdlTransformChildren2D, EcsOnDemand,
-        EcsContainer,
-        ID.SdlInitTransformChildren2D,
-        ID.SdlApplyTranslation2D,
-        ID.SdlApplyRotation2D,
-        ID.SdlApplyScaling2D,
-        !EcsRoot
-    );
-
-    /* System that applies transforms on top-level entities */
-    ECS_SYSTEM(world, SdlTransform2D, EcsPostFrame,
-        EcsRoot,
-        ID.SdlInitTransformChildren2D,
-        ID.SdlApplyTranslation2D,
-        ID.SdlApplyRotation2D,
-        ID.SdlApplyScaling2D,
-        ID.SdlTransformChildren2D
-    );
-
-    ecs_add(world, SdlTransformChildren2D_h, EcsHidden_h);
-    ecs_add(world, SdlTransform2D_h, EcsHidden_h);
 
 
     /* -- Rendering -- */

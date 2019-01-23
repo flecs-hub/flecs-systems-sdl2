@@ -11,10 +11,8 @@
             "reflecs.components.geometry",
             "reflecs.components.transform",
             "reflecs.components.input",
+            "reflecs.systems.transform",
             "sdl2"
         ]
-    },
-    "lang.c": {
-        "lib": ["m"]
     }
 }
