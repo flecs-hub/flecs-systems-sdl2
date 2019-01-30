@@ -1,5 +1,3 @@
-
-*.o
-*.dylib
 .DS_Store
-*.so
+bin
+.bake_cache
