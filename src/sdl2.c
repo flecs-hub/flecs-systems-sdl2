@@ -22,7 +22,7 @@ void EcsSystemsSdl2(
     ECS_COMPONENT(world, SdlWindow);
 
     /* Camera transformation */
-    ECS_SYSTEM(world, SdlCameraTransform2D, EcsOnFrame, EcsCamera2D, CONTAINER.EcsRoot);
+    ECS_SYSTEM(world, SdlCameraTransform2D, EcsOnFrame, EcsCamera2D, CONTAINER.EcsRoot, ID.SdlWindow);
     ecs_add(world, SdlCameraTransform2D_h, EcsHidden_h);
 
 
