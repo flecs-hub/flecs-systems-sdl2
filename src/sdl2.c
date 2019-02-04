@@ -28,7 +28,7 @@ void EcsSystemsSdl2(
 
     /* -- SDL / Window initialization -- */
 
-    ECS_SYSTEM(world, SdlInitWindow, EcsOnSet, EcsCanvas2D, ID.SdlWindow, ID.EcsInput, ID.EcsMatTransform2D);
+    ECS_SYSTEM(world, SdlInitWindow, EcsOnSet, EcsCanvas2D, ID.SdlWindow, ID.EcsInput);
     ECS_SYSTEM(world, SdlDeinitWindow, EcsOnRemove, SdlWindow);
     ECS_SYSTEM(world, SdlDeinit, EcsOnRemove, 0);
     ecs_add(world, SdlInitWindow_h, EcsHidden_h);

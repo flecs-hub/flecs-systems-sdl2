@@ -4,7 +4,6 @@ void SdlInitWindow(EcsRows *rows) {
     EcsWorld *world = rows->world;
     EcsEntity SdlWindow_h = ecs_component(rows, 1);
     EcsEntity EcsInput_h = ecs_component(rows, 2);
-    EcsEntity EcsMatTransform2D_h = ecs_component(rows, 3);
 
     void *row;
     for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
