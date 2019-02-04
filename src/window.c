@@ -79,16 +79,6 @@ void SdlInitWindow(EcsRows *rows) {
 
         /* Add EcsInput component */
         ecs_add(world, entity, EcsInput_h);
-
-        /* Allow canvas to be used as container for entities */
-        ecs_add(world, entity, EcsContainer_h);
-
-        /* Mark canvas as root for entity tree */
-        ecs_add(world, entity, EcsRoot_h);
-
-        /* Add identity transform matrix. This allows the canvas to be used as
-         * the parent transform for all scene entities */
-        ecs_set_ptr(world, entity, EcsMatTransform2D_h, &ECS_MAT3X3_IDENTITY);
     }
 }
 
