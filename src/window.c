@@ -23,7 +23,8 @@ void SdlInitWindow(EcsRows *rows) {
         if (!window) {
             fprintf(stderr, "SDL2 window creation failed for canvas: %s\n",
                 SDL_GetError());
-            continue;
+            ecs_quit(world);
+            break;
         }
 
         /* If viewport is not set explicitly, inherit from window */
@@ -48,7 +49,8 @@ void SdlInitWindow(EcsRows *rows) {
         if (!display) {
             fprintf(stderr, "SDL2 renderer creation failed for canvas: %s\n",
               SDL_GetError());
-            continue;
+            ecs_quit(world);
+            break;
         }
 
 

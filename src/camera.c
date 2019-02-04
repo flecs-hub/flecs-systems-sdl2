@@ -10,6 +10,11 @@ void SdlCameraTransform2D(EcsRows *rows) {
         if (camera->enabled) {
             EcsEntity root = ecs_entity(rows, row, 1);
             SdlWindow *wnd = ecs_get_ptr(rows->world, root, SdlWindow_h);
+            if (!wnd) {
+                /* Window creation must have failed */
+                break;
+            }
+
             wnd->projection = wnd->screen;
 
             ecs_mat3x3_add_translation(&wnd->projection, &camera->position);
