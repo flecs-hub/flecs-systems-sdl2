@@ -2,13 +2,12 @@
 
 void SdlInitWindow(EcsRows *rows) {
     EcsWorld *world = rows->world;
-    EcsEntity SdlWindow_h = ecs_component(rows, 1);
-    EcsEntity EcsInput_h = ecs_component(rows, 2);
+    EcsCanvas2D *canvas = ecs_column(rows, EcsCanvas2D, 1);
+    EcsType TSdlWindow = ecs_column_type(rows, 2);
+    EcsType TEcsInput = ecs_column_type(rows, 3);
 
-    void *row;
-    for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
-        EcsCanvas2D *canvas = ecs_data(rows, row, 0);
-        EcsEntity entity = ecs_entity(rows, row, ECS_ROW_ENTITY);
+    int i;
+    for (i = rows->begin; i < rows->end; i ++) {
 
         /* Create SDL Window with support for OpenGL and high resolutions */
         SDL_Window *window = SDL_CreateWindow(
@@ -69,7 +68,7 @@ void SdlInitWindow(EcsRows *rows) {
         ecs_mat3x3_add_translation(&screen, &translate);
 
         /* Add SdlWindow component that stores window and renderer */
-        ecs_set(world, entity, SdlWindow, {
+        ecs_set(world, rows->entities[i], SdlWindow, {
             .window = window,
             .display = display,
             .screen = screen,
@@ -79,14 +78,14 @@ void SdlInitWindow(EcsRows *rows) {
         });
 
         /* Add EcsInput component */
-        ecs_add(world, entity, EcsInput_h);
+        ecs_add(world, rows->entities[i], EcsInput);
     }
 }
 
 void SdlDeinitWindow(EcsRows *rows) {
-    void *row;
-    for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
-        SdlWindow *window = ecs_data(rows, row, 0);
-        SDL_DestroyWindow(window->window);
+    SdlWindow *window = ecs_column(rows, SdlWindow, 1);
+    int i;
+    for (i = rows->begin; i < rows->end; i ++) {
+        SDL_DestroyWindow(window[i].window);
     }
 }

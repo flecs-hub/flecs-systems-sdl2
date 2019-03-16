@@ -1,17 +1,17 @@
 {
-    "id":"reflecs.systems.sdl2",
+    "id":"flecs.systems.sdl2",
     "type":"package",
     "value": {
         "author": "Sander Mertens",
-        "description": "SDL2 based renderer for reflecs",
+        "description": "SDL2 based renderer for flecs",
         "use": [
-            "reflecs",
-            "reflecs.math",
-            "reflecs.components.graphics",
-            "reflecs.components.geometry",
-            "reflecs.components.transform",
-            "reflecs.components.input",
-            "reflecs.systems.transform",
+            "flecs",
+            "flecs.math",
+            "flecs.components.graphics",
+            "flecs.components.geometry",
+            "flecs.components.transform",
+            "flecs.components.input",
+            "flecs.systems.transform",
             "sdl2"
         ]
     }

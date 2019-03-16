@@ -1,15 +1,14 @@
 #include "sdl_private.h"
 
 void SdlCameraTransform2D(EcsRows *rows) {
-    void *row;
-    EcsEntity SdlWindow_h = ecs_component(rows, 2);
+    int i;
+    EcsCamera2D *camera = ecs_column(rows, EcsCamera2D, 1);
+    EcsEntity root = ecs_column_source(rows, 2);
+    EcsType TSdlWindow = ecs_column_type(rows, 3);
 
-    for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
-        EcsCamera2D *camera = ecs_data(rows, row, 0);
-
-        if (camera->enabled) {
-            EcsEntity root = ecs_entity(rows, row, 1);
-            SdlWindow *wnd = ecs_get_ptr(rows->world, root, SdlWindow_h);
+    for (i = rows->begin; i < rows->end; i ++) {
+        if (camera[i].enabled) {
+            SdlWindow *wnd = ecs_get_ptr(rows->world, root, SdlWindow);
             if (!wnd) {
                 /* Window creation must have failed */
                 break;
@@ -17,10 +16,10 @@ void SdlCameraTransform2D(EcsRows *rows) {
 
             wnd->projection = wnd->screen;
 
-            ecs_mat3x3_add_translation(&wnd->projection, &camera->position);
+            ecs_mat3x3_add_translation(&wnd->projection, &camera[i].position);
 
-            if (camera->zoom.x || camera->zoom.y) {
-                ecs_mat3x3_add_scale(&wnd->projection, &camera->zoom);
+            if (camera[i].zoom.x || camera[i].zoom.y) {
+                ecs_mat3x3_add_scale(&wnd->projection, &camera[i].zoom);
             }
 
             break;

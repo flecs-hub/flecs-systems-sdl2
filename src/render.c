@@ -45,56 +45,49 @@ void RenderRectangle(
 }
 
 void SdlRenderRectangle(EcsRows *rows) {
-    void *row;
+    SdlWindow *wnd = rows->param;
+    EcsRectangle *shape = ecs_column(rows, EcsRectangle, 1);
+    EcsMatTransform2D *m = ecs_column(rows, EcsMatTransform2D, 2);
+    EcsColor *c = ecs_column(rows, EcsColor, 3);
 
-    for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
-        SdlWindow *wnd = ecs_data(rows, row, 0);
-        EcsRectangle *shape = ecs_data(rows, row, 1);
-        EcsMatTransform2D *m = ecs_data(rows, row, 2);
-        EcsColor *c = ecs_data(rows, row, 3);
-
+    int i;
+    for (i = rows->begin; i < rows->end; i ++) {
         if (!c) {
-            c = &WHITE;
-        }
-
-        RenderRectangle(wnd, m, shape->width, shape->height, c);
+            RenderRectangle(wnd, &m[i], shape[i].width, shape[i].height, &c[i]);
+        } else {
+            RenderRectangle(wnd, &m[i], shape[i].width, shape[i].height, &WHITE);
+        }        
     }
 }
 
 void SdlRenderSquare(EcsRows *rows) {
-    void *row;
+    SdlWindow *wnd = rows->param;
+    EcsSquare *shape = ecs_column(rows, EcsSquare, 1);
+    EcsMatTransform2D *m = ecs_column(rows, EcsMatTransform2D, 2);
+    EcsColor *c = ecs_column(rows, EcsColor, 3);
 
-    for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
-        SdlWindow *wnd = ecs_data(rows, row, 0);
-        EcsSquare *shape = ecs_data(rows, row, 1);
-        EcsMatTransform2D *m = ecs_data(rows, row, 2);
-        EcsColor *c = ecs_data(rows, row, 3);
-
+    int i;
+    for (i = rows->begin; i < rows->end; i ++) {
         if (!c) {
-            c = &WHITE;
-        }
-
-        RenderRectangle(wnd, m, shape->size, shape->size, c);
+            RenderRectangle(wnd, &m[i], shape[i].size, shape[i].size, &c[i]);
+        } else {
+            RenderRectangle(wnd, &m[i], shape[i].size, shape[i].size, &WHITE);
+        }        
     }
 }
 
 void SdlRenderCircle(EcsRows *rows) {
-    void *row;
+    SdlWindow *wnd = rows->param;
+    EcsCircle *shape = ecs_column(rows, EcsCircle, 1);
+    EcsMatTransform2D *m = ecs_column(rows, EcsMatTransform2D, 2);
+    EcsColor *c = ecs_column(rows, EcsColor, 3);
 
-    for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
-        SdlWindow *wnd = ecs_data(rows, row, 0);
-        EcsCircle *shape = ecs_data(rows, row, 1);
-        EcsMatTransform2D *m = ecs_data(rows, row, 2);
-        EcsColor *c = ecs_data(rows, row, 3);
-
-        if (!c) {
-            c = &WHITE;
-        }
-
-        float radius = shape->radius;
+    int i;
+    for (i = rows->begin; i < rows->end; i ++) {
+        float radius = shape[i].radius;
 
         EcsVec2 position = (EcsVec2){0, 0};
-        ecs_mat3x3_transform(m, &position, &position, 1);
+        ecs_mat3x3_transform(&m[i], &position, &position, 1);
 
         /* Transform position & size to screen coordinates */
         EcsVec2 coord[] = {
@@ -104,32 +97,38 @@ void SdlRenderCircle(EcsRows *rows) {
 
         ecs_mat3x3_transform(&wnd->projection, coord, coord, 2);
 
-        filledEllipseRGBA(wnd->display,
-            coord[0].x, coord[0].y, /* position */
-            radius * wnd->scale.x, radius * wnd->scale.y, /* size */
-            c->r, c->g, c->b, c->a  /* color */
-        );
+        if (c) {
+            filledEllipseRGBA(wnd->display,
+                coord[0].x, coord[0].y, /* position */
+                radius * wnd->scale.x, radius * wnd->scale.y, /* size */
+                c[i].r, c[i].g, c[i].b, c[i].a  /* color */
+            );
+        } else {
+            filledEllipseRGBA(wnd->display,
+                coord[0].x, coord[0].y, /* position */
+                radius * wnd->scale.x, radius * wnd->scale.y, /* size */
+                WHITE.r, WHITE.g, WHITE.b, WHITE.a  /* color */
+            );            
+        }
     }
 }
 
 void SdlRender2D(EcsRows *rows) {
     EcsWorld *world = rows->world;
-    EcsEntity SdlRenderSquare_h = ecs_component(rows, 1);
-    EcsEntity SdlRenderRectangle_h = ecs_component(rows, 2);
-    EcsEntity SdlRenderCircle_h = ecs_component(rows, 3);
+    SdlWindow *wnd = ecs_column(rows, SdlWindow, 1);
+    EcsEntity SdlRenderSquare = ecs_column_component(rows, 2);
+    EcsEntity SdlRenderRectangle = ecs_column_component(rows, 3);
+    EcsEntity SdlRenderCircle = ecs_column_component(rows, 4);
 
-    void *row;
-    for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
-        EcsEntity root = ecs_entity(rows, row, ECS_ROW_ENTITY);
-        SdlWindow *wnd = ecs_data(rows, row, 0);
+    int i;
+    for (i = rows->begin; i < rows->end; i ++) {
+        SDL_SetRenderDrawColor(wnd[i].display, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderClear(wnd[i].display);
 
-        SDL_SetRenderDrawColor(wnd->display, 0, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(wnd->display);
+        ecs_run(world, SdlRenderSquare, 0, wnd);
+        ecs_run(world, SdlRenderRectangle, 0, wnd);
+        ecs_run(world, SdlRenderCircle, 0, wnd);
 
-        ecs_run_w_filter(world, SdlRenderSquare_h, 0, 0, 0, root, NULL);
-        ecs_run_w_filter(world, SdlRenderRectangle_h, 0, 0, 0, root, NULL);
-        ecs_run_w_filter(world, SdlRenderCircle_h, 0, 0, 0, root, NULL);
-
-        SDL_RenderPresent(wnd->display);
+        SDL_RenderPresent(wnd[i].display);
     }
 }

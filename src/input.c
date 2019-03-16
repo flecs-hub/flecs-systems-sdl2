@@ -43,15 +43,14 @@ void key_up(
 
 void SdlInput(EcsRows *rows) {
     EcsWorld *world = rows->world;
+    EcsInput *input = ecs_column(rows, EcsInput, 1);
 
-    void *row;
-    for (row = rows->first; row < rows->last; row = ecs_next(rows, row)) {
-        EcsInput *input = ecs_data(rows, row, 0);
-
+    int i;
+    for (i = rows->begin; i < rows->end; i ++) {
         /* Reset key state array */
         int i;
         for (i = 0; i < 128; i ++) {
-            EcsKeyState *state = &input->keys[i];
+            EcsKeyState *state = &input[i].keys[i];
             if (!state->current) {
                 state->state = 0;
                 state->pressed = 0;
@@ -67,35 +66,35 @@ void SdlInput(EcsRows *rows) {
 
             } else if (e.type == SDL_KEYDOWN) {
                 uint32_t sym = key_sym(e.key.keysym.sym);
-                key_down(&input->keys[sym]);
+                key_down(&input[i].keys[sym]);
 
             } else if (e.type == SDL_KEYUP) {
                 uint32_t sym = key_sym(e.key.keysym.sym);
-                key_up(&input->keys[sym]);
+                key_up(&input[i].keys[sym]);
 
             } else if (e.type == SDL_MOUSEBUTTONDOWN) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
-                    key_down(&input->mouse.left);
+                    key_down(&input[i].mouse.left);
                 } else if (e.button.button == SDL_BUTTON_RIGHT) {
-                    key_down(&input->mouse.right);
+                    key_down(&input[i].mouse.right);
                 }
 
             } else if (e.type == SDL_MOUSEBUTTONUP) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
-                    key_up(&input->mouse.left);
+                    key_up(&input[i].mouse.left);
                 } else if (e.button.button == SDL_BUTTON_RIGHT) {
-                    key_up(&input->mouse.right);
+                    key_up(&input[i].mouse.right);
                 }
 
             } else if (e.type == SDL_MOUSEMOTION) {
-                input->mouse.wnd.x = e.motion.x;
-                input->mouse.wnd.y = e.motion.y;
-                input->mouse.rel.x = e.motion.xrel;
-                input->mouse.rel.y = e.motion.yrel;
+                input[i].mouse.wnd.x = e.motion.x;
+                input[i].mouse.wnd.y = e.motion.y;
+                input[i].mouse.rel.x = e.motion.xrel;
+                input[i].mouse.rel.y = e.motion.yrel;
 
             } else if (e.type == SDL_MOUSEWHEEL) {
-                input->mouse.scroll.x = e.wheel.x;
-                input->mouse.scroll.y = e.wheel.y;
+                input[i].mouse.scroll.x = e.wheel.x;
+                input[i].mouse.scroll.y = e.wheel.y;
 
             } else if (e.type == SDL_WINDOWEVENT) {
                 switch (e.window.event) {

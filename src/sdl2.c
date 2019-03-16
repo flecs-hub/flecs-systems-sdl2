@@ -1,6 +1,8 @@
 
 #include "sdl_private.h"
 
+#include "systems.h"
+
 static
 void SdlDeinit(EcsRows *rows) {
     SDL_Quit();
@@ -22,62 +24,52 @@ void EcsSystemsSdl2(
     ECS_COMPONENT(world, SdlWindow);
 
     /* Camera transformation */
-    ECS_SYSTEM(world, SdlCameraTransform2D, EcsOnFrame, EcsCamera2D, CONTAINER.EcsRoot, ID.SdlWindow);
-    ecs_add(world, SdlCameraTransform2D_h, EcsHidden_h);
+    ECS_SYSTEM(world, SdlCameraTransform2D, EcsOnFrame, EcsCamera2D, CONTAINER.EcsRoot, ID.SdlWindow, SYSTEM.EcsHidden);
 
 
     /* -- SDL / Window initialization -- */
 
-    ECS_SYSTEM(world, SdlInitWindow, EcsOnSet, EcsCanvas2D, ID.SdlWindow, ID.EcsInput);
-    ECS_SYSTEM(world, SdlDeinitWindow, EcsOnRemove, SdlWindow);
-    ECS_SYSTEM(world, SdlDeinit, EcsOnRemove, 0);
-    ecs_add(world, SdlInitWindow_h, EcsHidden_h);
-    ecs_add(world, SdlDeinitWindow_h, EcsHidden_h);
-    ecs_add(world, SdlDeinit_h, EcsHidden_h);
-
+    ECS_SYSTEM(world, SdlInitWindow, EcsOnSet, EcsCanvas2D, ID.SdlWindow, ID.EcsInput, SYSTEM.EcsHidden);
+    ECS_SYSTEM(world, SdlDeinitWindow, EcsOnRemove, SdlWindow, SYSTEM.EcsHidden);
+    ECS_SYSTEM(world, SdlDeinit, EcsOnRemove, 0, SYSTEM.EcsHidden);
 
 
     /* -- Input processing -- */
 
-    ECS_SYSTEM(world, SdlInput, EcsOnLoad, EcsInput);
-    ecs_add(world, SdlInput_h, EcsHidden_h);
+    ECS_SYSTEM(world, SdlInput, EcsOnLoad, EcsInput, SYSTEM.EcsHidden);
 
 
     /* -- Rendering -- */
 
-    ECS_SYSTEM(world, SdlRenderSquare, EcsOnDemand,
-        CONTAINER.SdlWindow, EcsSquare, EcsMatTransform2D, ?EcsColor
+    ECS_SYSTEM(world, SdlRenderSquare, EcsManual,
+        EcsSquare, EcsMatTransform2D, ?EcsColor,
+        SYSTEMS.EcsHidden
     );
 
-    ECS_SYSTEM(world, SdlRenderRectangle, EcsOnDemand,
-        CONTAINER.SdlWindow, EcsRectangle, EcsMatTransform2D, ?EcsColor
+    ECS_SYSTEM(world, SdlRenderRectangle, EcsManual,
+        EcsRectangle, EcsMatTransform2D, ?EcsColor,
+        SYSTEM.EcsHidden
     );
 
-    ECS_SYSTEM(world, SdlRenderCircle, EcsOnDemand,
-        CONTAINER.SdlWindow, EcsCircle, EcsMatTransform2D, ?EcsColor
+    ECS_SYSTEM(world, SdlRenderCircle, EcsManual,
+        EcsCircle, EcsMatTransform2D, ?EcsColor,
+        SYSTEM.EcsHidden
     );
 
     ECS_SYSTEM(world, SdlRender2D, EcsOnStore,
         SdlWindow,
         ID.SdlRenderSquare,
         ID.SdlRenderRectangle,
-        ID.SdlRenderCircle);
+        ID.SdlRenderCircle
+        SYSTEM.Hidden
+    );
 
-    ecs_add(world, SdlRenderSquare_h, EcsHidden_h);
-    ecs_add(world, SdlRenderRectangle_h, EcsHidden_h);
-    ecs_add(world, SdlRenderCircle_h, EcsHidden_h);
-    ecs_add(world, SdlRender2D_h, EcsHidden_h);
-
-
-    /* Families */
-    ECS_FAMILY(world, Sdl, SdlInitWindow, SdlDeinitWindow, SdlInput, SdlRender2D);
-
-    /* Mark systems as hidden */
-    ecs_add(world, SdlRender2D_h, EcsHidden_h);
+    /* Types */
+    ECS_TYPE(world, Sdl, SdlInitWindow, SdlDeinitWindow, SdlInput, SdlRender2D);
 
     SDL_Init(SDL_INIT_VIDEO | SDL_WINDOW_OPENGL);
 
-    handles->Sdl = Sdl_h;
-    handles->SdlInput = SdlInput_h;
-    handles->SdlRender = SdlRender2D_h;
+    ECS_SET_COMPONENT(handles, Sdl);
+    ECS_SET_SYSTEM(handles, SdlInput);
+    ECS_SET_SYSTEM(handles, SdlRender2D);
 }
