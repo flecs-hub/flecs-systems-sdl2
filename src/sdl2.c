@@ -24,7 +24,7 @@ void EcsSystemsSdl2(
     ECS_COMPONENT(world, SdlWindow);
 
     /* Camera transformation */
-    ECS_SYSTEM(world, SdlCameraTransform2D, EcsOnFrame, EcsCamera2D, CONTAINER.EcsRoot, ID.SdlWindow, SYSTEM.EcsHidden);
+    ECS_SYSTEM(world, SdlCameraTransform2D, EcsOnFrame, EcsCamera2D, CONTAINER.EcsCanvas2D, ID.SdlWindow, SYSTEM.EcsHidden);
 
 
     /* -- SDL / Window initialization -- */
@@ -43,7 +43,7 @@ void EcsSystemsSdl2(
 
     ECS_SYSTEM(world, SdlRenderSquare, EcsManual,
         EcsSquare, EcsMatTransform2D, ?EcsColor,
-        SYSTEMS.EcsHidden
+        SYSTEM.EcsHidden
     );
 
     ECS_SYSTEM(world, SdlRenderRectangle, EcsManual,
@@ -60,8 +60,8 @@ void EcsSystemsSdl2(
         SdlWindow,
         ID.SdlRenderSquare,
         ID.SdlRenderRectangle,
-        ID.SdlRenderCircle
-        SYSTEM.Hidden
+        ID.SdlRenderCircle,
+        SYSTEM.EcsHidden
     );
 
     /* Types */

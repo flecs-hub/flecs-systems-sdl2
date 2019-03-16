@@ -48,8 +48,8 @@ void SdlInput(EcsRows *rows) {
     int i;
     for (i = rows->begin; i < rows->end; i ++) {
         /* Reset key state array */
-        int i;
-        for (i = 0; i < 128; i ++) {
+        int k;
+        for (k = 0; k < 128; k ++) {
             EcsKeyState *state = &input[i].keys[i];
             if (!state->current) {
                 state->state = 0;
