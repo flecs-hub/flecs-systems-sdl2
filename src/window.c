@@ -8,10 +8,14 @@ void SdlInitWindow(EcsRows *rows) {
 
     int i;
     for (i = rows->begin; i < rows->end; i ++) {
+        const char *title = canvas->title;
+        if (!title) {
+            title = "SDL2 window";
+        }
 
         /* Create SDL Window with support for OpenGL and high resolutions */
         SDL_Window *window = SDL_CreateWindow(
-            "SDL2 Window",
+            title,
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             canvas->window.width,
