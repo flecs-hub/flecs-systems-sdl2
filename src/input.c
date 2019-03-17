@@ -50,7 +50,7 @@ void SdlInput(EcsRows *rows) {
         /* Reset key state array */
         int k;
         for (k = 0; k < 128; k ++) {
-            EcsKeyState *state = &input[i].keys[i];
+            EcsKeyState *state = &input[i].keys[k];
             if (!state->current) {
                 state->state = 0;
                 state->pressed = 0;
