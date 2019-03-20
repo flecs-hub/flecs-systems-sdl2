@@ -46,7 +46,7 @@ void SdlInput(EcsRows *rows) {
     EcsInput *input = ecs_column(rows, EcsInput, 1);
 
     int i;
-    for (i = rows->begin; i < rows->end; i ++) {
+    for (i = 0; i < rows->count; i ++) {
         /* Reset key state array */
         int k;
         for (k = 0; k < 128; k ++) {

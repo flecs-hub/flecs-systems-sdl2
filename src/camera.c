@@ -6,7 +6,7 @@ void SdlCameraTransform2D(EcsRows *rows) {
     EcsEntity root = ecs_column_source(rows, 2);
     EcsType TSdlWindow = ecs_column_type(rows, 3);
 
-    for (i = rows->begin; i < rows->end; i ++) {
+    for (i = 0; i < rows->count; i ++) {
         if (camera[i].enabled) {
             SdlWindow *wnd = ecs_get_ptr(rows->world, root, SdlWindow);
             if (!wnd) {

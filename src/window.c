@@ -7,7 +7,7 @@ void SdlInitWindow(EcsRows *rows) {
     EcsType TEcsInput = ecs_column_type(rows, 3);
 
     int i;
-    for (i = rows->begin; i < rows->end; i ++) {
+    for (i = 0; i < rows->count; i ++) {
         const char *title = canvas->title;
         if (!title) {
             title = "SDL2 window";
@@ -89,7 +89,7 @@ void SdlInitWindow(EcsRows *rows) {
 void SdlDeinitWindow(EcsRows *rows) {
     SdlWindow *window = ecs_column(rows, SdlWindow, 1);
     int i;
-    for (i = rows->begin; i < rows->end; i ++) {
+    for (i = 0; i < rows->count; i ++) {
         SDL_DestroyWindow(window[i].window);
     }
 }

@@ -48,7 +48,7 @@ void SdlRenderRectangle(EcsRows *rows) {
     SdlWindow *wnd = rows->param;
 
     int i;
-    for (i = rows->begin; i < rows->end; i ++) {
+    for (i = 0; i < rows->count; i ++) {
         EcsRectangle *shape = ecs_field(rows, EcsRectangle, i, 1);
         EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
         EcsColor *c = ecs_field(rows, EcsColor, i, 3);
@@ -65,7 +65,7 @@ void SdlRenderSquare(EcsRows *rows) {
     SdlWindow *wnd = rows->param;
 
     int i;
-    for (i = rows->begin; i < rows->end; i ++) {
+    for (i = 0; i < rows->count; i ++) {
         EcsSquare *shape = ecs_field(rows, EcsSquare, i, 1);
         EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
         EcsColor *c = ecs_field(rows, EcsColor, i, 3);
@@ -81,7 +81,7 @@ void SdlRenderCircle(EcsRows *rows) {
     SdlWindow *wnd = rows->param;
 
     int i;
-    for (i = rows->begin; i < rows->end; i ++) {
+    for (i = 0; i < rows->count; i ++) {
         EcsCircle *shape = ecs_field(rows, EcsCircle, i, 1);
         EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
         EcsColor *c = ecs_field(rows, EcsColor, i, 3);
@@ -123,7 +123,7 @@ void SdlRender2D(EcsRows *rows) {
     EcsEntity SdlRenderCircle = ecs_column_component(rows, 4);
 
     int i;
-    for (i = rows->begin; i < rows->end; i ++) {
+    for (i = 0; i < rows->count; i ++) {
         SDL_SetRenderDrawColor(wnd[i].display, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(wnd[i].display);
 
