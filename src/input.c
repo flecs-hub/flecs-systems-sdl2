@@ -41,23 +41,33 @@ void key_up(
     key->current = false;
 }
 
+static
+void key_reset(
+    EcsKeyState *state)
+{
+    if (!state->current) {
+        state->state = 0;
+        state->pressed = 0;
+    } else if (state->state) {
+        state->pressed = 0;
+    }
+}
+
 void SdlInput(EcsRows *rows) {
     EcsWorld *world = rows->world;
     EcsInput *input = ecs_column(rows, EcsInput, 1);
+    EcsType TEcsCanvas2D = ecs_column_type(rows, 2);
 
     int i;
     for (i = 0; i < rows->count; i ++) {
         /* Reset key state array */
         int k;
         for (k = 0; k < 128; k ++) {
-            EcsKeyState *state = &input[i].keys[k];
-            if (!state->current) {
-                state->state = 0;
-                state->pressed = 0;
-            } else if (state->state) {
-                state->pressed = 0;
-            }
+            key_reset(&input[i].keys[k]);
         }
+
+        key_reset(&input[i].mouse.left);
+        key_reset(&input[i].mouse.right);
 
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
@@ -91,6 +101,13 @@ void SdlInput(EcsRows *rows) {
                 input[i].mouse.wnd.y = e.motion.y;
                 input[i].mouse.rel.x = e.motion.xrel;
                 input[i].mouse.rel.y = e.motion.yrel;
+
+                EcsCanvas2D *canvas = ecs_get_singleton_ptr(world, EcsCanvas2D);
+
+                input[i].mouse.view.x = 
+                    e.motion.x * ((float)canvas->viewport.width / (float)canvas->window.width) + canvas->viewport.x;
+                input[i].mouse.view.y = 
+                    e.motion.y * ((float)canvas->viewport.width / (float)canvas->window.width) + canvas->viewport.y;
 
             } else if (e.type == SDL_MOUSEWHEEL) {
                 input[i].mouse.scroll.x = e.wheel.x;

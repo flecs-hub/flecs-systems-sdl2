@@ -36,7 +36,7 @@ void EcsSystemsSdl2(
 
     /* -- Input processing -- */
 
-    ECS_SYSTEM(world, SdlInput, EcsOnLoad, EcsInput, SYSTEM.EcsHidden);
+    ECS_SYSTEM(world, SdlInput, EcsOnLoad, EcsInput, ID.EcsCanvas2D, SYSTEM.EcsHidden);
 
 
     /* -- Rendering -- */
