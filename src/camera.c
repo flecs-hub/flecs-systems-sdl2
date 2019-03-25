@@ -3,8 +3,8 @@
 void SdlCameraTransform2D(ecs_rows_t *rows) {
     int i;
     EcsCamera2D *camera = ecs_column(rows, EcsCamera2D, 1);
-    EcsEntity root = ecs_column_source(rows, 2);
-    EcsType TSdlWindow = ecs_column_type(rows, 3);
+    ecs_entity_t root = ecs_column_source(rows, 2);
+    ecs_type_t TSdlWindow = ecs_column_type(rows, 3);
 
     for (i = 0; i < rows->count; i ++) {
         if (camera[i].enabled) {
