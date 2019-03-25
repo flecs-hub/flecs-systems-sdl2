@@ -53,8 +53,8 @@ void key_reset(
     }
 }
 
-void SdlInput(EcsRows *rows) {
-    EcsWorld *world = rows->world;
+void SdlInput(ecs_rows_t *rows) {
+    ecs_world_t *world = rows->world;
     EcsInput *input = ecs_column(rows, EcsInput, 1);
     EcsType TEcsCanvas2D = ecs_column_type(rows, 2);
 

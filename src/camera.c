@@ -1,6 +1,6 @@
 #include "sdl_private.h"
 
-void SdlCameraTransform2D(EcsRows *rows) {
+void SdlCameraTransform2D(ecs_rows_t *rows) {
     int i;
     EcsCamera2D *camera = ecs_column(rows, EcsCamera2D, 1);
     EcsEntity root = ecs_column_source(rows, 2);

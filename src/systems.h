@@ -4,20 +4,20 @@
 
 #include <include/bake_config.h>
 
-void SdlCameraTransform2D(EcsRows *rows);
+void SdlCameraTransform2D(ecs_rows_t *rows);
 
-void SdlInput(EcsRows *rows);
+void SdlInput(ecs_rows_t *rows);
 
-void SdlRenderRectangle(EcsRows *rows);
+void SdlRenderRectangle(ecs_rows_t *rows);
 
-void SdlRenderSquare(EcsRows *rows);
+void SdlRenderSquare(ecs_rows_t *rows);
 
-void SdlRenderCircle(EcsRows *rows);
+void SdlRenderCircle(ecs_rows_t *rows);
 
-void SdlRender2D(EcsRows *rows);
+void SdlRender2D(ecs_rows_t *rows);
 
-void SdlInitWindow(EcsRows *rows);
+void SdlInitWindow(ecs_rows_t *rows);
 
-void SdlDeinitWindow(EcsRows *rows);
+void SdlDeinitWindow(ecs_rows_t *rows);
 
 #endif

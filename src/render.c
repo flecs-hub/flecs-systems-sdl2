@@ -44,7 +44,7 @@ void RenderRectangle(
     filledPolygonRGBA(wnd->display, gfx_x, gfx_y, 5, c->r, c->g, c->b, c->a);
 }
 
-void SdlRenderRectangle(EcsRows *rows) {
+void SdlRenderRectangle(ecs_rows_t *rows) {
     SdlWindow *wnd = rows->param;
 
     int i;
@@ -61,7 +61,7 @@ void SdlRenderRectangle(EcsRows *rows) {
     }
 }
 
-void SdlRenderSquare(EcsRows *rows) {
+void SdlRenderSquare(ecs_rows_t *rows) {
     SdlWindow *wnd = rows->param;
 
     int i;
@@ -77,7 +77,7 @@ void SdlRenderSquare(EcsRows *rows) {
     }
 }
 
-void SdlRenderCircle(EcsRows *rows) {
+void SdlRenderCircle(ecs_rows_t *rows) {
     SdlWindow *wnd = rows->param;
 
     int i;
@@ -115,8 +115,8 @@ void SdlRenderCircle(EcsRows *rows) {
     }
 }
 
-void SdlRender2D(EcsRows *rows) {
-    EcsWorld *world = rows->world;
+void SdlRender2D(ecs_rows_t *rows) {
+    ecs_world_t *world = rows->world;
     SdlWindow *wnd = ecs_column(rows, SdlWindow, 1);
     EcsEntity SdlRenderSquare = ecs_column_component(rows, 2);
     EcsEntity SdlRenderRectangle = ecs_column_component(rows, 3);

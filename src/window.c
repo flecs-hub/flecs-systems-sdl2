@@ -1,7 +1,7 @@
 #include "sdl_private.h"
 
-void SdlInitWindow(EcsRows *rows) {
-    EcsWorld *world = rows->world;
+void SdlInitWindow(ecs_rows_t *rows) {
+    ecs_world_t *world = rows->world;
     EcsCanvas2D *canvas = ecs_column(rows, EcsCanvas2D, 1);
     EcsType TSdlWindow = ecs_column_type(rows, 2);
     EcsType TEcsInput = ecs_column_type(rows, 3);
@@ -84,7 +84,7 @@ void SdlInitWindow(EcsRows *rows) {
     }
 }
 
-void SdlDeinitWindow(EcsRows *rows) {
+void SdlDeinitWindow(ecs_rows_t *rows) {
     SdlWindow *window = ecs_column(rows, SdlWindow, 1);
     int i;
     for (i = 0; i < rows->count; i ++) {

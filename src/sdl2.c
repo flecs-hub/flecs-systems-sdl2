@@ -4,12 +4,12 @@
 #include "systems.h"
 
 static
-void SdlDeinit(EcsRows *rows) {
+void SdlDeinit(ecs_rows_t *rows) {
     SDL_Quit();
 }
 
 void EcsSystemsSdl2(
-    EcsWorld *world,
+    ecs_world_t *world,
     int flags,
     void *handles_out)
 {

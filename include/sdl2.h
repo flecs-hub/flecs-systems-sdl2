@@ -14,7 +14,7 @@ typedef struct EcsSystemsSdl2Handles {
 } EcsSystemsSdl2Handles;
 
 void EcsSystemsSdl2(
-    EcsWorld *world,
+    ecs_world_t *world,
     int flags,
     void *handles_out);
 
