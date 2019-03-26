@@ -69,7 +69,7 @@ void EcsSystemsSdl2(
 
     SDL_Init(SDL_INIT_VIDEO | SDL_WINDOW_OPENGL);
 
-    ECS_SET_COMPONENT(handles, Sdl);
-    ECS_SET_SYSTEM(handles, SdlInput);
-    ECS_SET_SYSTEM(handles, SdlRender2D);
+    ECS_SET_ENTITY(handles, Sdl);
+    ECS_SET_ENTITY(handles, SdlInput);
+    ECS_SET_ENTITY(handles, SdlRender2D);
 }

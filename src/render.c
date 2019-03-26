@@ -118,9 +118,9 @@ void SdlRenderCircle(ecs_rows_t *rows) {
 void SdlRender2D(ecs_rows_t *rows) {
     ecs_world_t *world = rows->world;
     SdlWindow *wnd = ecs_column(rows, SdlWindow, 1);
-    ecs_entity_t SdlRenderSquare = ecs_column_component(rows, 2);
-    ecs_entity_t SdlRenderRectangle = ecs_column_component(rows, 3);
-    ecs_entity_t SdlRenderCircle = ecs_column_component(rows, 4);
+    ecs_entity_t SdlRenderSquare = ecs_column_entity(rows, 2);
+    ecs_entity_t SdlRenderRectangle = ecs_column_entity(rows, 3);
+    ecs_entity_t SdlRenderCircle = ecs_column_entity(rows, 4);
 
     int i;
     for (i = 0; i < rows->count; i ++) {

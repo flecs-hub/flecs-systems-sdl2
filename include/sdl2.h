@@ -8,9 +8,9 @@ extern "C" {
 #endif
 
 typedef struct EcsSystemsSdl2Handles {
-    ECS_DECLARE_COMPONENT(Sdl);
-    ECS_DECLARE_SYSTEM(SdlInput);
-    ECS_DECLARE_SYSTEM(SdlRender2D);
+    ECS_DECLARE_ENTITY(Sdl);
+    ECS_DECLARE_ENTITY(SdlInput);
+    ECS_DECLARE_ENTITY(SdlRender2D);
 } EcsSystemsSdl2Handles;
 
 void EcsSystemsSdl2(
@@ -19,9 +19,9 @@ void EcsSystemsSdl2(
     void *handles_out);
 
 #define EcsSystemsSdl2_ImportHandles(handles)\
-    ECS_IMPORT_COMPONENT(handles, Sdl);\
-    ECS_IMPORT_SYSTEM(handles, SdlInput);\
-    ECS_IMPORT_SYSTEM(handles, SdlRender2D);
+    ECS_IMPORT_ENTITY(handles, Sdl);\
+    ECS_IMPORT_ENTITY(handles, SdlInput);\
+    ECS_IMPORT_ENTITY(handles, SdlRender2D);
 
 #ifdef __cplusplus
 }
