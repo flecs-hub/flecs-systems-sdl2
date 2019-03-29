@@ -102,7 +102,7 @@ void SdlInput(ecs_rows_t *rows) {
                 input[i].mouse.rel.x = e.motion.xrel;
                 input[i].mouse.rel.y = e.motion.yrel;
 
-                EcsCanvas2D *canvas = ecs_get_singleton_ptr(world, EcsCanvas2D);
+                EcsCanvas2D *canvas = ecs_get_ptr(world, rows->entities[i], EcsCanvas2D);
 
                 input[i].mouse.view.x = 
                     e.motion.x * ((float)canvas->viewport.width / (float)canvas->window.width) + canvas->viewport.x;
