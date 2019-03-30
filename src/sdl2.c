@@ -24,7 +24,7 @@ void EcsSystemsSdl2(
     ECS_COMPONENT(world, SdlWindow);
 
     /* Camera transformation */
-    ECS_SYSTEM(world, SdlCameraTransform2D, EcsOnFrame, EcsCamera2D, CONTAINER.EcsCanvas2D, ID.SdlWindow, SYSTEM.EcsHidden);
+    ECS_SYSTEM(world, SdlCameraTransform2D, EcsOnUpdate, EcsCamera2D, CONTAINER.EcsCanvas2D, ID.SdlWindow, SYSTEM.EcsHidden);
 
 
     /* -- SDL / Window initialization -- */
