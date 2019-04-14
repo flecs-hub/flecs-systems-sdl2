@@ -42,17 +42,17 @@ void EcsSystemsSdl2(
     /* -- Rendering -- */
 
     ECS_SYSTEM(world, SdlRenderSquare, EcsManual,
-        EcsSquare, EcsMatTransform2D, ?EcsColor,
+        EcsSquare, EcsMatTransform2D, ?EcsColor, ?EcsLineColor,
         SYSTEM.EcsHidden
     );
 
     ECS_SYSTEM(world, SdlRenderRectangle, EcsManual,
-        EcsRectangle, EcsMatTransform2D, ?EcsColor,
+        EcsRectangle, EcsMatTransform2D, ?EcsColor, ?EcsLineColor,
         SYSTEM.EcsHidden
     );
 
     ECS_SYSTEM(world, SdlRenderCircle, EcsManual,
-        EcsCircle, EcsMatTransform2D, ?EcsColor,
+        EcsCircle, EcsMatTransform2D, ?EcsColor, ?EcsLineColor,
         SYSTEM.EcsHidden
     );
 

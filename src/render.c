@@ -22,7 +22,8 @@ void RenderRectangle(
     EcsMatTransform2D *m,
     uint32_t width,
     uint32_t height,
-    EcsColor *c)
+    EcsColor *c,
+    EcsLineColor *lc)
 {
     int w = width / 2.0;
     int h = height / 2.0;
@@ -41,7 +42,17 @@ void RenderRectangle(
     Sint16 gfx_y[5];
     Vec2ToGfx(points, gfx_x, gfx_y, 5);
 
-    filledPolygonRGBA(wnd->display, gfx_x, gfx_y, 5, c->r, c->g, c->b, c->a);
+    if (!c && !lc) {
+        c = &WHITE;
+    }
+
+    if (c) {
+        filledPolygonRGBA(wnd->display, gfx_x, gfx_y, 5, c->r, c->g, c->b, c->a);
+    }
+
+    if (lc) {
+        polygonRGBA(wnd->display, gfx_x, gfx_y, 5, lc->r, lc->g, lc->b, lc->a);
+    }
 }
 
 void SdlRenderRectangle(ecs_rows_t *rows) {
@@ -52,12 +63,8 @@ void SdlRenderRectangle(ecs_rows_t *rows) {
         EcsRectangle *shape = ecs_field(rows, EcsRectangle, i, 1);
         EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
         EcsColor *c = ecs_field(rows, EcsColor, i, 3);
-
-        if (c) {
-            RenderRectangle(wnd, m, shape->width, shape->height, c);
-        } else {
-            RenderRectangle(wnd, m, shape->width, shape->height, &WHITE);
-        }        
+        EcsLineColor *lc = ecs_field(rows, EcsLineColor, i, 4);
+        RenderRectangle(wnd, m, shape->width, shape->height, c, lc);
     }
 }
 
@@ -69,11 +76,8 @@ void SdlRenderSquare(ecs_rows_t *rows) {
         EcsSquare *shape = ecs_field(rows, EcsSquare, i, 1);
         EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
         EcsColor *c = ecs_field(rows, EcsColor, i, 3);
-        if (c) {
-            RenderRectangle(wnd, m, shape->size, shape->size, c);
-        } else {
-            RenderRectangle(wnd, m, shape->size, shape->size, &WHITE);
-        }        
+        EcsLineColor *lc = ecs_field(rows, EcsLineColor, i, 4);
+        RenderRectangle(wnd, m, shape->size, shape->size, c, lc);  
     }
 }
 
@@ -85,6 +89,7 @@ void SdlRenderCircle(ecs_rows_t *rows) {
         EcsCircle *shape = ecs_field(rows, EcsCircle, i, 1);
         EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
         EcsColor *c = ecs_field(rows, EcsColor, i, 3);
+        EcsLineColor *lc = ecs_field(rows, EcsLineColor, i, 4);
 
         float radius = shape->radius;
 
@@ -99,18 +104,42 @@ void SdlRenderCircle(ecs_rows_t *rows) {
 
         ecs_mat3x3_transform(&wnd->projection, coord, coord, 2);
 
+        if (!c && !lc) {
+            c = &WHITE;
+        }
+
         if (c) {
             filledEllipseRGBA(wnd->display,
                 coord[0].x, coord[0].y, /* position */
                 radius * wnd->scale.x, radius * wnd->scale.y, /* size */
                 c->r, c->g, c->b, c->a  /* color */
             );
-        } else {
-            filledEllipseRGBA(wnd->display,
-                coord[0].x, coord[0].y, /* position */
-                radius * wnd->scale.x, radius * wnd->scale.y, /* size */
-                WHITE.r, WHITE.g, WHITE.b, WHITE.a  /* color */
-            );            
+        }
+
+        if (lc) {
+            SDL_SetRenderDrawColor(wnd->display, lc->r, lc->g, lc->b, lc->a);
+
+            int steps = radius;
+            if (steps > 75) {
+                steps = 75;
+            }
+
+            SDL_Point *points = alloca(sizeof(SDL_Point) * (steps + 1));
+            float step_size = (2.0 * M_PI) / steps;
+            int w;
+            for (w = 0; w < 2; w ++) {
+                int i;
+                float x_radius = radius * wnd->scale.x;
+                float y_radius = radius * wnd->scale.y;
+
+                for (i = 0; i <= steps; i ++) {
+                    points[i].x = cos(step_size * i) * x_radius + coord[0].x;
+                    points[i].y = sin(step_size * i) * y_radius + coord[0].y;                
+                }
+                
+                SDL_RenderDrawLines(wnd->display, points, steps + 1);          
+                radius -= 0.5;
+            }
         }
     }
 }
