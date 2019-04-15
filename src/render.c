@@ -81,6 +81,41 @@ void SdlRenderSquare(ecs_rows_t *rows) {
     }
 }
 
+void SdlRenderPolygon8(ecs_rows_t *rows) {
+    SdlWindow *wnd = rows->param;
+
+    int i;
+    for (i = 0; i < rows->count; i ++) {
+        EcsPolygon8 *shape = ecs_field(rows, EcsPolygon8, i, 1);
+        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
+        EcsColor *c = ecs_field(rows, EcsColor, i, 3);
+        EcsLineColor *lc = ecs_field(rows, EcsLineColor, i, 4);
+        
+        uint8_t point_count = shape->point_count;
+        ecs_assert(point_count <= 8, ECS_INVALID_PARAMETERS, NULL);
+        EcsPoint2D points[point_count];
+
+        ecs_mat3x3_transform(m, shape->points, points, point_count);
+        ecs_mat3x3_transform(&wnd->projection, points, points, point_count);
+
+        Sint16 gfx_x[point_count];
+        Sint16 gfx_y[point_count];
+        Vec2ToGfx(points, gfx_x, gfx_y, point_count);
+
+        if (!c && !lc) {
+            c = &WHITE;
+        }
+
+        if (c) {
+            filledPolygonRGBA(wnd->display, gfx_x, gfx_y, point_count, c->r, c->g, c->b, c->a);
+        }
+
+        if (lc) {
+            polygonRGBA(wnd->display, gfx_x, gfx_y, point_count, lc->r, lc->g, lc->b, lc->a);
+        }
+    }
+}
+
 void SdlRenderCircle(ecs_rows_t *rows) {
     SdlWindow *wnd = rows->param;
 
@@ -117,6 +152,7 @@ void SdlRenderCircle(ecs_rows_t *rows) {
         }
 
         if (lc) {
+            SDL_SetRenderDrawBlendMode(wnd->display, (lc->a == 255) ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND);
             SDL_SetRenderDrawColor(wnd->display, lc->r, lc->g, lc->b, lc->a);
 
             int steps = radius;
@@ -150,6 +186,7 @@ void SdlRender2D(ecs_rows_t *rows) {
     ecs_entity_t SdlRenderSquare = ecs_column_entity(rows, 2);
     ecs_entity_t SdlRenderRectangle = ecs_column_entity(rows, 3);
     ecs_entity_t SdlRenderCircle = ecs_column_entity(rows, 4);
+    ecs_entity_t SdlRenderPolygon8 = ecs_column_entity(rows, 5);
 
     int i;
     for (i = 0; i < rows->count; i ++) {
@@ -159,6 +196,7 @@ void SdlRender2D(ecs_rows_t *rows) {
         ecs_run(world, SdlRenderSquare, 0, wnd);
         ecs_run(world, SdlRenderRectangle, 0, wnd);
         ecs_run(world, SdlRenderCircle, 0, wnd);
+        ecs_run(world, SdlRenderPolygon8, 0, wnd);
 
         SDL_RenderPresent(wnd[i].display);
     }
