@@ -61,12 +61,18 @@ void EcsSystemsSdl2(
         SYSTEM.EcsHidden
     );
 
+    ECS_SYSTEM(world, SdlRenderDot, EcsManual,
+        EcsDot, EcsMatTransform2D, ?EcsColor,
+        SYSTEM.EcsHidden
+    );
+
     ECS_SYSTEM(world, SdlRender2D, EcsOnStore,
         SdlWindow,
         ID.SdlRenderSquare,
         ID.SdlRenderRectangle,
         ID.SdlRenderCircle,
         ID.SdlRenderPolygon8,
+        ID.SdlRenderDot,
         SYSTEM.EcsHidden
     );
 

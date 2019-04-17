@@ -180,6 +180,30 @@ void SdlRenderCircle(ecs_rows_t *rows) {
     }
 }
 
+void SdlRenderDot(ecs_rows_t *rows) {
+    SdlWindow *wnd = rows->param;
+
+    int i;
+    for (i = 0; i < rows->count; i ++) {
+        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
+        EcsColor *c = ecs_field(rows, EcsColor, i, 3);
+
+        if (!c) {
+            c = &WHITE;
+        }
+
+        EcsVec2 position = (EcsVec2){0, 0};
+        ecs_mat3x3_transform(m, &position, &position, 1);
+        ecs_mat3x3_transform(&wnd->projection, &position, &position, 1);
+
+        SDL_SetRenderDrawColor(wnd->display, c->r, c->g, c->b, c->a);
+
+        SDL_RenderDrawLine(wnd->display, position.x - 1, position.y - 1, position.x + 1, position.y - 1);
+        SDL_RenderDrawLine(wnd->display, position.x - 1, position.y + 1, position.x + 1, position.y + 1);
+        SDL_RenderDrawLine(wnd->display, position.x - 1, position.y, position.x + 1, position.y);   
+    }
+}
+
 void SdlRender2D(ecs_rows_t *rows) {
     ecs_world_t *world = rows->world;
     SdlWindow *wnd = ecs_column(rows, SdlWindow, 1);
@@ -187,16 +211,19 @@ void SdlRender2D(ecs_rows_t *rows) {
     ecs_entity_t SdlRenderRectangle = ecs_column_entity(rows, 3);
     ecs_entity_t SdlRenderCircle = ecs_column_entity(rows, 4);
     ecs_entity_t SdlRenderPolygon8 = ecs_column_entity(rows, 5);
+    ecs_entity_t SdlRenderDot = ecs_column_entity(rows, 6);
 
     int i;
     for (i = 0; i < rows->count; i ++) {
         SDL_SetRenderDrawColor(wnd[i].display, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(wnd[i].display);
 
+        ecs_run(world, SdlRenderDot, 0, wnd);
         ecs_run(world, SdlRenderSquare, 0, wnd);
         ecs_run(world, SdlRenderRectangle, 0, wnd);
         ecs_run(world, SdlRenderCircle, 0, wnd);
         ecs_run(world, SdlRenderPolygon8, 0, wnd);
+        
 
         SDL_RenderPresent(wnd[i].display);
     }

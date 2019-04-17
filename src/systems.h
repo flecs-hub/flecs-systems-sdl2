@@ -16,6 +16,8 @@ void SdlRenderCircle(ecs_rows_t *rows);
 
 void SdlRenderPolygon8(ecs_rows_t *rows);
 
+void SdlRenderDot(ecs_rows_t *rows);
+
 void SdlRender2D(ecs_rows_t *rows);
 
 void SdlInitWindow(ecs_rows_t *rows);
