@@ -7,18 +7,17 @@
 extern "C" {
 #endif
 
-typedef struct EcsSystemsSdl2Handles {
+typedef struct FlecsSystemsSdl2 {
     ECS_DECLARE_ENTITY(Sdl);
     ECS_DECLARE_ENTITY(SdlInput);
     ECS_DECLARE_ENTITY(SdlRender2D);
-} EcsSystemsSdl2Handles;
+} FlecsSystemsSdl2;
 
-void EcsSystemsSdl2(
+void FlecsSystemsSdl2Import(
     ecs_world_t *world,
-    int flags,
-    void *handles_out);
+    int flags);
 
-#define EcsSystemsSdl2_ImportHandles(handles)\
+#define FlecsSystemsSdl2ImportHandles(handles)\
     ECS_IMPORT_ENTITY(handles, Sdl);\
     ECS_IMPORT_ENTITY(handles, SdlInput);\
     ECS_IMPORT_ENTITY(handles, SdlRender2D);

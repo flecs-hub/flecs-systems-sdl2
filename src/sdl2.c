@@ -8,18 +8,17 @@ void SdlDeinit(ecs_rows_t *rows) {
     SDL_Quit();
 }
 
-void EcsSystemsSdl2(
+void FlecsSystemsSdl2Import(
     ecs_world_t *world,
-    int flags,
-    void *handles_out)
+    int flags)
 {
-    EcsSystemsSdl2Handles *handles = handles_out;
+    ECS_IMPORT(world, FlecsComponentsGraphics, flags);
+    ECS_IMPORT(world, FlecsComponentsGeometry, flags);
+    ECS_IMPORT(world, FlecsComponentsTransform, flags);
+    ECS_IMPORT(world, FlecsComponentsInput, flags);
+    ECS_IMPORT(world, FlecsSystemsTransform, flags);
 
-    ECS_IMPORT(world, EcsComponentsGraphics, flags);
-    ECS_IMPORT(world, EcsComponentsGeometry, flags);
-    ECS_IMPORT(world, EcsComponentsTransform, flags);
-    ECS_IMPORT(world, EcsComponentsInput, flags);
-    ECS_IMPORT(world, EcsSystemsTransform, flags);
+    ECS_MODULE(world, FlecsSystemsSdl2);
 
     ECS_COMPONENT(world, SdlWindow);
 
