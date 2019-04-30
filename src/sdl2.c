@@ -40,6 +40,11 @@ void FlecsSystemsSdl2Import(
 
     /* -- Rendering -- */
 
+    ECS_SYSTEM(world, SdlRenderLine, EcsManual,
+        EcsLine, EcsMatTransform2D, ?EcsLineColor,
+        SYSTEM.EcsHidden
+    );
+
     ECS_SYSTEM(world, SdlRenderSquare, EcsManual,
         EcsSquare, EcsMatTransform2D, ?EcsColor, ?EcsLineColor,
         SYSTEM.EcsHidden
@@ -72,6 +77,7 @@ void FlecsSystemsSdl2Import(
         ID.SdlRenderCircle,
         ID.SdlRenderPolygon8,
         ID.SdlRenderDot,
+        ID.SdlRenderLine,
         SYSTEM.EcsHidden
     );
 

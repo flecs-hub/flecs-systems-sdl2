@@ -8,6 +8,8 @@ void SdlCameraTransform2D(ecs_rows_t *rows);
 
 void SdlInput(ecs_rows_t *rows);
 
+void SdlRenderLine(ecs_rows_t *rows);
+
 void SdlRenderRectangle(ecs_rows_t *rows);
 
 void SdlRenderSquare(ecs_rows_t *rows);

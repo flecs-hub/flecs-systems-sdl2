@@ -155,7 +155,7 @@ void SdlRenderCircle(ecs_rows_t *rows) {
             SDL_SetRenderDrawBlendMode(wnd->display, (lc->a == 255) ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND);
             SDL_SetRenderDrawColor(wnd->display, lc->r, lc->g, lc->b, lc->a);
 
-            int steps = radius;
+            int steps = radius * wnd->scale.y;
             if (steps > 75) {
                 steps = 75;
             }
@@ -174,7 +174,7 @@ void SdlRenderCircle(ecs_rows_t *rows) {
                 }
                 
                 SDL_RenderDrawLines(wnd->display, points, steps + 1);          
-                radius -= 0.5;
+                radius -= 0.5 / wnd->scale.y;
             }
         }
     }
@@ -204,6 +204,32 @@ void SdlRenderDot(ecs_rows_t *rows) {
     }
 }
 
+void SdlRenderLine(ecs_rows_t *rows) {
+    SdlWindow *wnd = rows->param;
+
+    int i;
+    for (i = 0; i < rows->count; i ++) {
+        EcsLine *shape = ecs_field(rows, EcsLine, i, 1);
+        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
+        EcsLineColor *c = ecs_field(rows, EcsLineColor, i, 3);
+
+        if (!c) {
+            c = &WHITE;
+        }
+
+        EcsVec2 position[2] = {
+            {shape->start.x, shape->start.y},
+            {shape->stop.x, shape->stop.y}
+        };
+
+        ecs_mat3x3_transform(m, position, position, 2);
+        ecs_mat3x3_transform(&wnd->projection, position, position, 2);
+
+        SDL_SetRenderDrawColor(wnd->display, c->r, c->g, c->b, c->a);
+        SDL_RenderDrawLine(wnd->display, position[0].x, position[0].y, position[1].x, position[1].y);          
+    }
+}
+
 void SdlRender2D(ecs_rows_t *rows) {
     ecs_world_t *world = rows->world;
     SdlWindow *wnd = ecs_column(rows, SdlWindow, 1);
@@ -212,6 +238,7 @@ void SdlRender2D(ecs_rows_t *rows) {
     ecs_entity_t SdlRenderCircle = ecs_column_entity(rows, 4);
     ecs_entity_t SdlRenderPolygon8 = ecs_column_entity(rows, 5);
     ecs_entity_t SdlRenderDot = ecs_column_entity(rows, 6);
+    ecs_entity_t SdlRenderLine = ecs_column_entity(rows, 7);
 
     int i;
     for (i = 0; i < rows->count; i ++) {
@@ -219,11 +246,11 @@ void SdlRender2D(ecs_rows_t *rows) {
         SDL_RenderClear(wnd[i].display);
 
         ecs_run(world, SdlRenderDot, 0, wnd);
+        ecs_run(world, SdlRenderLine, 0, wnd);
         ecs_run(world, SdlRenderSquare, 0, wnd);
         ecs_run(world, SdlRenderRectangle, 0, wnd);
         ecs_run(world, SdlRenderCircle, 0, wnd);
         ecs_run(world, SdlRenderPolygon8, 0, wnd);
-        
 
         SDL_RenderPresent(wnd[i].display);
     }
