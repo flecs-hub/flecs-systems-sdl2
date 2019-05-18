@@ -39,7 +39,7 @@
 
 /* Convenience macro for exporting symbols */
 #ifndef FLECS_SYSTEMS_SDL2_STATIC
-  #if FLECS_SYSTEMS_SDL2_IMPL && defined _MSC_VER
+  #if FLECS_SYSTEMS_SDL2_IMPL && (defined(_MSC_VER) || defined(__MINGW32__))
     #define FLECS_SYSTEMS_SDL2_EXPORT __declspec(dllexport)
   #elif FLECS_SYSTEMS_SDL2_IMPL
     #define FLECS_SYSTEMS_SDL2_EXPORT __attribute__((__visibility__("default")))

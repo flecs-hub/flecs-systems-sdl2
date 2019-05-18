@@ -66,8 +66,8 @@ void SdlInitWindow(ecs_rows_t *rows) {
             canvas->window_actual.height / 2
         };
 
-        ecs_mat3x3_add_scale(&screen, &scale);
         ecs_mat3x3_add_translation(&screen, &translate);
+        ecs_mat3x3_add_scale(&screen, &scale);
 
         /* Add SdlWindow component that stores window and renderer */
         ecs_set(world, rows->entities[i], SdlWindow, {
