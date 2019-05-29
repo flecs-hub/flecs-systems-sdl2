@@ -12,7 +12,7 @@
             "flecs.components.transform",
             "flecs.components.input",
             "flecs.systems.transform",
-            "sdl2"
+            "bake.sdl2"
         ]
     }
 }

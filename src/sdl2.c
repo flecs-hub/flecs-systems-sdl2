@@ -1,6 +1,5 @@
 
 #include "sdl_private.h"
-
 #include "systems.h"
 
 static

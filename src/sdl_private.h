@@ -1,5 +1,5 @@
 
-#include <include/sdl2.h>
+#include <flecs_systems_sdl2.h>
 #include <SDL2/SDL.h>
 #include "SDL2_gfxPrimitives.h"
 

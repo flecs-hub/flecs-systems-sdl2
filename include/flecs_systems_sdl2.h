@@ -1,7 +1,7 @@
 #ifndef FLECS_SYSTEMS_SDL2_H
 #define FLECS_SYSTEMS_SDL2_H
 
-#include "bake_config.h"
+#include <flecs-systems-sdl2/bake_config.h>
 
 #ifdef __cplusplus
 extern "C" {

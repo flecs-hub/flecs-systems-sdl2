@@ -20,21 +20,19 @@
 /* Generated includes are specific to the bake environment. If a project is not
  * built with bake, it will have to provide alternative methods for including
  * its dependencies. */
-#ifdef __BAKE__
 /* Headers of public dependencies */
-#include <flecs>
-#include <flecs.math>
-#include <flecs.components.graphics>
-#include <flecs.components.geometry>
-#include <flecs.components.transform>
-#include <flecs.components.input>
-#include <flecs.systems.transform>
-#include <sdl2>
+#include <flecs.h>
+#include <flecs_math.h>
+#include <flecs_components_graphics.h>
+#include <flecs_components_geometry.h>
+#include <flecs_components_transform.h>
+#include <flecs_components_input.h>
+#include <flecs_systems_transform.h>
+#include <bake_sdl2.h>
 
 /* Headers of private dependencies */
 #ifdef FLECS_SYSTEMS_SDL2_IMPL
 /* No dependencies */
-#endif
 #endif
 
 /* Convenience macro for exporting symbols */

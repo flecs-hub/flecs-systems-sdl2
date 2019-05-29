@@ -2,7 +2,7 @@
 #ifndef FLECS_SYSTEMS_SYSTEMS_H
 #define FLECS_SYSTEMS_SYSTEMS_H
 
-#include <include/bake_config.h>
+#include <flecs_systems_sdl2.h>
 
 void SdlCameraTransform2D(ecs_rows_t *rows);
 
