@@ -60,10 +60,10 @@ void SdlRenderRectangle(ecs_rows_t *rows) {
 
     int i;
     for (i = 0; i < rows->count; i ++) {
-        EcsRectangle *shape = ecs_field(rows, EcsRectangle, i, 1);
-        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
-        EcsColor *c = ecs_field(rows, EcsColor, i, 3);
-        EcsLineColor *lc = ecs_field(rows, EcsLineColor, i, 4);
+        EcsRectangle *shape = ecs_field(rows, EcsRectangle, 1, i);
+        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, 2, i);
+        EcsColor *c = ecs_field(rows, EcsColor, 3, i);
+        EcsLineColor *lc = ecs_field(rows, EcsLineColor, 4, i);
         RenderRectangle(wnd, m, shape->width, shape->height, c, lc);
     }
 }
@@ -73,10 +73,10 @@ void SdlRenderSquare(ecs_rows_t *rows) {
 
     int i;
     for (i = 0; i < rows->count; i ++) {
-        EcsSquare *shape = ecs_field(rows, EcsSquare, i, 1);
-        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
-        EcsColor *c = ecs_field(rows, EcsColor, i, 3);
-        EcsLineColor *lc = ecs_field(rows, EcsLineColor, i, 4);
+        EcsSquare *shape = ecs_field(rows, EcsSquare, 1, i);
+        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, 2, i);
+        EcsColor *c = ecs_field(rows, EcsColor, 3, i);
+        EcsLineColor *lc = ecs_field(rows, EcsLineColor, 4, i);
         RenderRectangle(wnd, m, shape->size, shape->size, c, lc);  
     }
 }
@@ -86,10 +86,10 @@ void SdlRenderPolygon8(ecs_rows_t *rows) {
 
     int i;
     for (i = 0; i < rows->count; i ++) {
-        EcsPolygon8 *shape = ecs_field(rows, EcsPolygon8, i, 1);
-        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
-        EcsColor *c = ecs_field(rows, EcsColor, i, 3);
-        EcsLineColor *lc = ecs_field(rows, EcsLineColor, i, 4);
+        EcsPolygon8 *shape = ecs_field(rows, EcsPolygon8, 1, i);
+        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, 2, i);
+        EcsColor *c = ecs_field(rows, EcsColor, 3, i);
+        EcsLineColor *lc = ecs_field(rows, EcsLineColor, 4, i);
         
         uint8_t point_count = shape->point_count;
         ecs_assert(point_count <= 8, ECS_INVALID_PARAMETERS, NULL);
@@ -121,10 +121,10 @@ void SdlRenderCircle(ecs_rows_t *rows) {
 
     int i;
     for (i = 0; i < rows->count; i ++) {
-        EcsCircle *shape = ecs_field(rows, EcsCircle, i, 1);
-        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
-        EcsColor *c = ecs_field(rows, EcsColor, i, 3);
-        EcsLineColor *lc = ecs_field(rows, EcsLineColor, i, 4);
+        EcsCircle *shape = ecs_field(rows, EcsCircle, 1, i);
+        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, 2, i);
+        EcsColor *c = ecs_field(rows, EcsColor, 3, i);
+        EcsLineColor *lc = ecs_field(rows, EcsLineColor, 4, i);
 
         float radius = shape->radius;
 
@@ -185,8 +185,8 @@ void SdlRenderDot(ecs_rows_t *rows) {
 
     int i;
     for (i = 0; i < rows->count; i ++) {
-        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
-        EcsColor *c = ecs_field(rows, EcsColor, i, 3);
+        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, 2, i);
+        EcsColor *c = ecs_field(rows, EcsColor, 3, i);
 
         if (!c) {
             c = &WHITE;
@@ -209,9 +209,9 @@ void SdlRenderLine(ecs_rows_t *rows) {
 
     int i;
     for (i = 0; i < rows->count; i ++) {
-        EcsLine *shape = ecs_field(rows, EcsLine, i, 1);
-        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, i, 2);
-        EcsLineColor *c = ecs_field(rows, EcsLineColor, i, 3);
+        EcsLine *shape = ecs_field(rows, EcsLine, 1, i);
+        EcsMatTransform2D *m = ecs_field(rows, EcsMatTransform2D, 2, i);
+        EcsLineColor *c = ecs_field(rows, EcsLineColor, 3, i);
 
         if (!c) {
             c = &WHITE;
@@ -248,8 +248,8 @@ void SdlRender2D(ecs_rows_t *rows) {
         ecs_run(world, SdlRenderDot, 0, wnd);
         ecs_run(world, SdlRenderLine, 0, wnd);
         ecs_run(world, SdlRenderSquare, 0, wnd);
-        ecs_run(world, SdlRenderRectangle, 0, wnd);
         ecs_run(world, SdlRenderCircle, 0, wnd);
+        ecs_run(world, SdlRenderRectangle, 0, wnd);
         ecs_run(world, SdlRenderPolygon8, 0, wnd);
 
         SDL_RenderPresent(wnd[i].display);

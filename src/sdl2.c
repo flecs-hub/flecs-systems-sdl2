@@ -22,19 +22,19 @@ void FlecsSystemsSdl2Import(
     ECS_COMPONENT(world, SdlWindow);
 
     /* Camera transformation */
-    ECS_SYSTEM(world, SdlCameraTransform2D, EcsOnUpdate, EcsCamera2D, CONTAINER.EcsCanvas2D, ID.SdlWindow, SYSTEM.EcsHidden);
+    ECS_SYSTEM(world, SdlCameraTransform2D, EcsOnUpdate, EcsCamera2D, CONTAINER.EcsCanvas2D, .SdlWindow, SYSTEM.EcsHidden);
 
 
     /* -- SDL / Window initialization -- */
 
-    ECS_SYSTEM(world, SdlInitWindow, EcsOnSet, EcsCanvas2D, ID.SdlWindow, ID.EcsInput, SYSTEM.EcsHidden);
+    ECS_SYSTEM(world, SdlInitWindow, EcsOnSet, EcsCanvas2D, .SdlWindow, .EcsInput, SYSTEM.EcsHidden);
     ECS_SYSTEM(world, SdlDeinitWindow, EcsOnRemove, SdlWindow, SYSTEM.EcsHidden);
     ECS_SYSTEM(world, SdlDeinit, EcsOnRemove, 0, SYSTEM.EcsHidden);
 
 
     /* -- Input processing -- */
 
-    ECS_SYSTEM(world, SdlInput, EcsOnLoad, EcsInput, ID.EcsCanvas2D, SYSTEM.EcsHidden);
+    ECS_SYSTEM(world, SdlInput, EcsOnLoad, EcsInput, .EcsCanvas2D, SYSTEM.EcsHidden);
 
 
     /* -- Rendering -- */
@@ -71,12 +71,12 @@ void FlecsSystemsSdl2Import(
 
     ECS_SYSTEM(world, SdlRender2D, EcsOnStore,
         SdlWindow,
-        ID.SdlRenderSquare,
-        ID.SdlRenderRectangle,
-        ID.SdlRenderCircle,
-        ID.SdlRenderPolygon8,
-        ID.SdlRenderDot,
-        ID.SdlRenderLine,
+        .SdlRenderSquare,
+        .SdlRenderRectangle,
+        .SdlRenderCircle,
+        .SdlRenderPolygon8,
+        .SdlRenderDot,
+        .SdlRenderLine,
         SYSTEM.EcsHidden
     );
 
