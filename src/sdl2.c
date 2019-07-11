@@ -29,7 +29,7 @@ void FlecsSystemsSdl2Import(
 
     ECS_SYSTEM(world, SdlInitWindow, EcsOnSet, EcsCanvas2D, .SdlWindow, .EcsInput, SYSTEM.EcsHidden);
     ECS_SYSTEM(world, SdlDeinitWindow, EcsOnRemove, SdlWindow, SYSTEM.EcsHidden);
-    ECS_SYSTEM(world, SdlDeinit, EcsOnRemove, 0, SYSTEM.EcsHidden);
+    ECS_SYSTEM(world, SdlDeinit, EcsOnRemove, SYSTEM.EcsHidden);
 
 
     /* -- Input processing -- */

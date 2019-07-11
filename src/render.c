@@ -92,7 +92,7 @@ void SdlRenderPolygon8(ecs_rows_t *rows) {
         EcsLineColor *lc = ecs_field(rows, EcsLineColor, 4, i);
         
         uint8_t point_count = shape->point_count;
-        ecs_assert(point_count <= 8, ECS_INVALID_PARAMETERS, NULL);
+        ecs_assert(point_count <= 8, ECS_INVALID_PARAMETER, NULL);
         EcsPoint2D points[point_count];
 
         ecs_mat3x3_transform(m, shape->points, points, point_count);
