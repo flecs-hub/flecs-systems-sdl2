@@ -20,13 +20,13 @@ static
 void RenderRectangle(
     SdlWindow *wnd,
     EcsMatTransform2D *m,
-    uint32_t width,
-    uint32_t height,
+    float width,
+    float height,
     EcsColor *c,
     EcsLineColor *lc)
 {
-    int w = width / 2.0;
-    int h = height / 2.0;
+    float w = width / 2.0;
+    float h = height / 2.0;
 
     EcsVec2 points[5];
     points[0] = (EcsVec2){-w, -h};
