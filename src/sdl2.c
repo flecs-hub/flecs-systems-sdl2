@@ -85,7 +85,7 @@ void FlecsSystemsSdl2Import(
 
     SDL_Init(SDL_INIT_VIDEO | SDL_WINDOW_OPENGL);
 
-    ECS_SET_ENTITY(handles, Sdl);
-    ECS_SET_ENTITY(handles, SdlInput);
-    ECS_SET_ENTITY(handles, SdlRender2D);
+    ECS_SET_ENTITY(Sdl);
+    ECS_SET_ENTITY(SdlInput);
+    ECS_SET_ENTITY(SdlRender2D);
 }
