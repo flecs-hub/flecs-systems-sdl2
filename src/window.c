@@ -3,8 +3,8 @@
 void SdlInitWindow(ecs_rows_t *rows) {
     ecs_world_t *world = rows->world;
     EcsCanvas2D *canvas = ecs_column(rows, EcsCanvas2D, 1);
-    ecs_type_t TSdlWindow = ecs_column_type(rows, 2);
-    ecs_type_t TEcsInput = ecs_column_type(rows, 3);
+    ECS_COLUMN_COMPONENT(rows, SdlWindow, 2);
+    ECS_COLUMN_COMPONENT(rows, EcsInput, 3);
 
     int i;
     for (i = 0; i < rows->count; i ++) {
