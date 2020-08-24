@@ -6,12 +6,8 @@
         "description": "SDL2 based renderer for flecs",
         "use": [
             "flecs",
-            "flecs.math",
-            "flecs.components.graphics",
-            "flecs.components.geometry",
-            "flecs.components.transform",
+            "flecs.components.gui",
             "flecs.components.input",
-            "flecs.systems.transform",
             "bake.sdl2"
         ]
     }

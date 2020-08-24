@@ -19,30 +19,21 @@
 
 /* Headers of public dependencies */
 #include <flecs.h>
-#include <flecs_math.h>
-#include <flecs_components_graphics.h>
-#include <flecs_components_geometry.h>
-#include <flecs_components_transform.h>
+#include <flecs_components_gui.h>
 #include <flecs_components_input.h>
-#include <flecs_systems_transform.h>
 #include <bake_sdl2.h>
 
-/* Headers of private dependencies */
-#ifdef FLECS_SYSTEMS_SDL2_IMPL
-/* No dependencies */
-#endif
-
 /* Convenience macro for exporting symbols */
-#ifndef FLECS_SYSTEMS_SDL2_STATIC
-  #if FLECS_SYSTEMS_SDL2_IMPL && (defined(_MSC_VER) || defined(__MINGW32__))
-    #define FLECS_SYSTEMS_SDL2_EXPORT __declspec(dllexport)
-  #elif FLECS_SYSTEMS_SDL2_IMPL
-    #define FLECS_SYSTEMS_SDL2_EXPORT __attribute__((__visibility__("default")))
-  #elif defined _MSC_VER
-    #define FLECS_SYSTEMS_SDL2_EXPORT __declspec(dllimport)
-  #else
-    #define FLECS_SYSTEMS_SDL2_EXPORT
-  #endif
+#ifndef flecs_systems_sdl2_STATIC
+#if flecs_systems_sdl2_EXPORTS && (defined(_MSC_VER) || defined(__MINGW32__))
+  #define FLECS_SYSTEMS_SDL2_EXPORT __declspec(dllexport)
+#elif flecs_systems_sdl2_EXPORTS
+  #define FLECS_SYSTEMS_SDL2_EXPORT __attribute__((__visibility__("default")))
+#elif defined _MSC_VER
+  #define FLECS_SYSTEMS_SDL2_EXPORT __declspec(dllimport)
+#else
+  #define FLECS_SYSTEMS_SDL2_EXPORT
+#endif
 #else
   #define FLECS_SYSTEMS_SDL2_EXPORT
 #endif

@@ -2,6 +2,7 @@
 #define FLECS_SYSTEMS_SDL2_H
 
 #include <flecs-systems-sdl2/bake_config.h>
+#include <flecs-systems-sdl2/window.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,18 +10,14 @@ extern "C" {
 
 typedef struct FlecsSystemsSdl2 {
     ECS_DECLARE_ENTITY(Sdl);
-    ECS_DECLARE_ENTITY(SdlInput);
-    ECS_DECLARE_ENTITY(SdlRender2D);
 } FlecsSystemsSdl2;
 
+FLECS_SYSTEMS_SDL2_EXPORT
 void FlecsSystemsSdl2Import(
-    ecs_world_t *world,
-    int flags);
+    ecs_world_t *world);
 
 #define FlecsSystemsSdl2ImportHandles(handles)\
-    ECS_IMPORT_ENTITY(handles, Sdl);\
-    ECS_IMPORT_ENTITY(handles, SdlInput);\
-    ECS_IMPORT_ENTITY(handles, SdlRender2D);
+    ECS_IMPORT_ENTITY(handles, Sdl);
 
 #ifdef __cplusplus
 }
