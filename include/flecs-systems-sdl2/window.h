@@ -9,7 +9,6 @@ extern "C" {
 
 typedef struct Sdl2Window {
     SDL_Window *window;
-    SDL_Renderer *renderer;
     int actual_width;
     int actual_height;
 } Sdl2Window;
