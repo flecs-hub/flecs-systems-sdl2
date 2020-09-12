@@ -23,4 +23,23 @@ void FlecsSystemsSdl2Import(
 }
 #endif
 
+#ifdef __cplusplus
+
+namespace flecs {
+namespace systems {
+
+class sdl2 : FlecsSystemsSdl2 {
+public:
+    sdl2(flecs::world& ecs) {
+        FlecsSystemsSdl2Import(ecs.c_ptr());
+
+        ecs.module<flecs::systems::sdl2>();
+    }
+};
+
+}
+}
+
+#endif
+
 #endif
