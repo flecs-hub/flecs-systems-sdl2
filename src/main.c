@@ -3,9 +3,22 @@
 
 static
 uint32_t key_sym(
-    uint32_t sdl_sym)
+    uint32_t sdl_sym,
+    bool shift)
 {
-    if (sdl_sym < 128) return sdl_sym;
+    if (sdl_sym < 128) {
+        if (shift) {
+            if (sdl_sym == ECS_KEY_EQUALS) {
+                sdl_sym = ECS_KEY_PLUS;
+            } else if (sdl_sym == ECS_KEY_UNDERSCORE) {
+                sdl_sym = ECS_KEY_MINUS;
+            } else {
+                return sdl_sym;
+            }
+        }
+        return sdl_sym;
+    }
+
     switch(sdl_sym) {
     case SDLK_RIGHT: return 'R';
     case SDLK_LEFT: return 'L';
@@ -73,11 +86,11 @@ void Sdl2ProcessEvents(ecs_iter_t *it) {
             ecs_quit(it->world);
 
         } else if (e.type == SDL_KEYDOWN) {
-            uint32_t sym = key_sym(e.key.keysym.sym);
+            uint32_t sym = key_sym(e.key.keysym.sym, input->keys['S'].state != 0);
             key_down(&input->keys[sym]);
 
         } else if (e.type == SDL_KEYUP) {
-            uint32_t sym = key_sym(e.key.keysym.sym);
+            uint32_t sym = key_sym(e.key.keysym.sym, input->keys['S'].state != 0);
             key_up(&input->keys[sym]);
 
         } else if (e.type == SDL_MOUSEBUTTONDOWN) {
