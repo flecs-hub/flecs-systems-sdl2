@@ -12,7 +12,7 @@ typedef struct FlecsSystemsSdl2 {
     ECS_DECLARE_ENTITY(Sdl);
 } FlecsSystemsSdl2;
 
-FLECS_SYSTEMS_SDL2_EXPORT
+FLECS_SYSTEMS_SDL2_API
 void FlecsSystemsSdl2Import(
     ecs_world_t *world);
 

@@ -17,7 +17,7 @@ typedef struct FlecsSystemsSdl2Window {
     ECS_DECLARE_COMPONENT(Sdl2Window);
 } FlecsSystemsSdl2Window;
 
-FLECS_SYSTEMS_SDL2_EXPORT
+FLECS_SYSTEMS_SDL2_API
 void FlecsSystemsSdl2WindowImport(
     ecs_world_t *world);
 

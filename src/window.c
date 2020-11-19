@@ -3,7 +3,7 @@
 static
 void Sdl2CreateWindow(ecs_iter_t *it) {
     EcsWindow *window = ecs_column(it, EcsWindow, 1);
-    ecs_entity_t ecs_entity(Sdl2Window) = ecs_column_entity(it, 2);
+    ecs_entity_t ecs_typeid(Sdl2Window) = ecs_column_entity(it, 2);
 
     int i;
     for (i = 0; i < it->count; i ++) {
