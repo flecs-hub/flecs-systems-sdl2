@@ -2,8 +2,8 @@
 
 static
 void Sdl2CreateWindow(ecs_iter_t *it) {
-    EcsWindow *window = ecs_column(it, EcsWindow, 1);
-    ecs_entity_t ecs_typeid(Sdl2Window) = ecs_column_entity(it, 2);
+    EcsWindow *window = ecs_term(it, EcsWindow, 1);
+    ecs_entity_t ecs_id(Sdl2Window) = ecs_term_id(it, 2);
 
     int i;
     for (i = 0; i < it->count; i ++) {
@@ -50,7 +50,7 @@ void Sdl2CreateWindow(ecs_iter_t *it) {
 
 static
 void Sdl2DestroyWindow(ecs_iter_t *it) {
-    Sdl2Window *window = ecs_column(it, Sdl2Window, 1);
+    Sdl2Window *window = ecs_term(it, Sdl2Window, 1);
 
     int i;
     for (i = 0; i < it->count; i ++) {
@@ -63,14 +63,12 @@ void FlecsSystemsSdl2WindowImport(ecs_world_t *world) {
 
     ecs_set_name_prefix(world, "Sdl2");
 
-    ECS_COMPONENT(world, Sdl2Window);
+    ECS_COMPONENT_DEFINE(world, Sdl2Window);
 
-    ECS_SYSTEM(world, Sdl2CreateWindow, EcsOnSet, 
+    ECS_OBSERVER(world, Sdl2CreateWindow, EcsOnSet, 
         [in] flecs.components.gui.Window,
-        [out] :flecs.systems.sdl2.window.Window);
+        [out] flecs.systems.sdl2.window.Window());
 
-    ECS_SYSTEM(world, Sdl2DestroyWindow, EcsUnSet, 
-        [in] flecs.systems.sdl2.window.Window);
-
-    ECS_EXPORT_COMPONENT(Sdl2Window);
+    ECS_OBSERVER(world, Sdl2DestroyWindow, EcsUnSet, 
+        [in] flecs.systems.sdl2.window.Window());
 }

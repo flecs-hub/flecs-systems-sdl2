@@ -9,6 +9,7 @@
             "flecs.components.gui",
             "flecs.components.input",
             "bake.sdl2"
-        ]
+        ],
+        "amalgamate": true
     }
 }
