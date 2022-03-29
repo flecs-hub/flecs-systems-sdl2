@@ -133,7 +133,7 @@ void FlecsSystemsSdl2Import(ecs_world_t *world) {
 
     /* Input system */
     ECS_SYSTEM(world, Sdl2ProcessEvents, EcsPostLoad, 
-        $flecs.components.input.Input);
+        flecs.components.input.Input($));
     ecs_set_ptr(world, ecs_id(EcsInput), EcsInput, NULL);
 
     /* SDL deinitialization */
