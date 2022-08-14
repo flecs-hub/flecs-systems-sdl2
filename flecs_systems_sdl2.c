@@ -2,6 +2,7 @@
 #include "flecs_systems_sdl2.h"
 #endif
 
+ECS_COMPONENT_DECLARE(Sdl2Window);
 
 static
 uint32_t key_sym(
@@ -10,7 +11,7 @@ uint32_t key_sym(
 {
     if (sdl_sym < 128) {
         if (shift) {
-            if (sdl_sym == ECS_KEY_EQUALS) {
+            if (sdl_sym == ECS_KEY_EQUAL) {
                 sdl_sym = ECS_KEY_PLUS;
             } else if (sdl_sym == ECS_KEY_UNDERSCORE) {
                 sdl_sym = ECS_KEY_MINUS;
@@ -71,7 +72,7 @@ void key_reset(
 
 static
 void Sdl2ProcessEvents(ecs_iter_t *it) {
-    EcsInput *input = ecs_term(it, EcsInput, 1);
+    EcsInput *input = ecs_field(it, EcsInput, 1);
 
     /* Reset key state array */
     int k;
@@ -158,15 +159,14 @@ void FlecsSystemsSdl2Import(ecs_world_t *world) {
 
 static
 void Sdl2CreateWindow(ecs_iter_t *it) {
-    EcsWindow *window = ecs_term(it, EcsWindow, 1);
-    ecs_entity_t ecs_id(Sdl2Window) = ecs_term_id(it, 2);
+    EcsCanvas *window = ecs_field(it, EcsCanvas, 1);
+    ecs_entity_t ecs_id(Sdl2Window) = ecs_field_id(it, 2);
 
     int i;
     for (i = 0; i < it->count; i ++) {
         ecs_entity_t e = it->entities[i];
 
-        bool added = false;
-        Sdl2Window *sdl_window = ecs_get_mut(it->world, e, Sdl2Window, &added);
+        Sdl2Window *sdl_window = ecs_get_mut(it->world, e, Sdl2Window);
 
         const char *title = window[i].title;
         if (!title) {
@@ -175,13 +175,6 @@ void Sdl2CreateWindow(ecs_iter_t *it) {
 
         int x = SDL_WINDOWPOS_UNDEFINED;
         int y = SDL_WINDOWPOS_UNDEFINED;
-
-        if (window[i].x) {
-            x = window[i].x;
-        }
-        if (window[i].y) {
-            y = window[i].y;
-        }
 
         /* Create SDL Window with support for OpenGL and high resolutions */
         SDL_Window *wnd = SDL_CreateWindow(
@@ -206,7 +199,7 @@ void Sdl2CreateWindow(ecs_iter_t *it) {
 
 static
 void Sdl2DestroyWindow(ecs_iter_t *it) {
-    Sdl2Window *window = ecs_term(it, Sdl2Window, 1);
+    Sdl2Window *window = ecs_field(it, Sdl2Window, 1);
 
     int i;
     for (i = 0; i < it->count; i ++) {
@@ -222,7 +215,7 @@ void FlecsSystemsSdl2WindowImport(ecs_world_t *world) {
     ECS_COMPONENT_DEFINE(world, Sdl2Window);
 
     ECS_OBSERVER(world, Sdl2CreateWindow, EcsOnSet, 
-        [in] flecs.components.gui.Window,
+        [in] flecs.components.gui.Canvas,
         [out] flecs.systems.sdl2.window.Window());
 
     ECS_OBSERVER(world, Sdl2DestroyWindow, EcsUnSet, 

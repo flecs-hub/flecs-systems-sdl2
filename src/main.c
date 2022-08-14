@@ -8,7 +8,7 @@ uint32_t key_sym(
 {
     if (sdl_sym < 128) {
         if (shift) {
-            if (sdl_sym == ECS_KEY_EQUALS) {
+            if (sdl_sym == ECS_KEY_EQUAL) {
                 sdl_sym = ECS_KEY_PLUS;
             } else if (sdl_sym == ECS_KEY_UNDERSCORE) {
                 sdl_sym = ECS_KEY_MINUS;
@@ -69,7 +69,7 @@ void key_reset(
 
 static
 void Sdl2ProcessEvents(ecs_iter_t *it) {
-    EcsInput *input = ecs_term(it, EcsInput, 1);
+    EcsInput *input = ecs_field(it, EcsInput, 1);
 
     /* Reset key state array */
     int k;
